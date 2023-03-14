@@ -65,17 +65,22 @@ void SetupRC()
 }
 void NormalKeys(unsigned char key, int x, int y)
 {
-    if(key == 'w') xRot -= 5.0f;
-    else if(key == 's') xRot += 5.0f;
-    else if(key == 'a') yRot -= 5.0f;
-    else if(key == 'd') yRot += 5.0f;
-    else if(key == 'q') zRot += 5.0f;
-    else if(key == 'e') zRot -= 5.0f;
+    if (key == 'w')
+        xRot -= 5.0f;
+    else if (key == 's')
+        xRot += 5.0f;
+    else if (key == 'a')
+        yRot -= 5.0f;
+    else if (key == 'd')
+        yRot += 5.0f;
+    else if (key == 'q')
+        zRot += 5.0f;
+    else if (key == 'e')
+        zRot -= 5.0f;
     yRot = (GLfloat)((const int)yRot % 360);
     xRot = (GLfloat)((const int)xRot % 360);
     zRot = (GLfloat)((const int)zRot % 360);
     glutPostRedisplay();
-
 }
 // Called to draw scene
 void RenderScene(void)
@@ -91,11 +96,11 @@ void RenderScene(void)
 
     // Move object back and do in place rotation
     glTranslatef(0.0f, -1.0f, -5.0f);
-    //Rotacionar no y
+    // Rotacionar no y
     glRotatef(yRot, 0.0f, 1.0f, 0.0f);
-    //Rotacionar no x
-    glRotatef(xRot, 1.0f,0.0f, 0.0f);
-    //Rotacionar no z
+    // Rotacionar no x
+    glRotatef(xRot, 1.0f, 0.0f, 0.0f);
+    // Rotacionar no z
     glRotatef(zRot, 0.0f, 0.0f, 1.0f);
 
     // Draw something
@@ -105,16 +110,16 @@ void RenderScene(void)
     // Parte de baixo
     glColor3f(1.0f, 1.0f, 1.0f);
     glPushMatrix();
-    glTranslatef(0.0f,.0f,0.0f);
-    gluSphere(pObj, 0.45f,26,13);
+    glTranslatef(0.0f, .0f, 0.0f);
+    gluSphere(pObj, 0.45f, 26, 13);
     glPopMatrix();
     // Parte do meio
     glColor3f(1.0f, 1.0f, 1.0f);
     glPushMatrix();
-    glTranslatef(0.0f,.6f,0.0f);
-    gluSphere(pObj, 0.32f,26,13);
+    glTranslatef(0.0f, .6f, 0.0f);
+    gluSphere(pObj, 0.32f, 26, 13);
     glPopMatrix();
-    
+
     // Cabeca
     glPushMatrix(); // save transform matrix state
     glTranslatef(0.0f, 1.0f, 0.0f);
@@ -124,7 +129,7 @@ void RenderScene(void)
     // Nose (orange)
     glColor3f(1.0f, 0.4f, 0.51f);
     glPushMatrix();
-    glTranslatef(0.0f, 1.0f, 0.2f);
+    glTranslatef(0.0f, 1.05f, 0.2f);
     gluCylinder(pObj, 0.04f, 0.0f, 0.3f, 26, 13);
     glPopMatrix();
 
@@ -132,50 +137,87 @@ void RenderScene(void)
     glColor3f(0.0f, 0.0f, 0.0f);
     glPushMatrix();
     glTranslatef(-.1f, 1.1f, .2f);
-    gluSphere(pObj,0.02f,26,13);
+    gluSphere(pObj, 0.02f, 26, 13);
     glPopMatrix();
 
     // Olho esquerdo
     glColor3f(0.0f, 0.0f, 0.0f);
     glPushMatrix();
     glTranslatef(.1f, 1.1f, .2f);
-    gluSphere(pObj,0.02f,26,13);
+    gluSphere(pObj, 0.02f, 26, 13);
     glPopMatrix();
+
     // Chapeu
     // Parte de baixo
-    glColor3f(1.0f,0.0f,0.0f);
+    glColor3f(1.0f, 0.0f, 0.0f);
     glPushMatrix();
-    glRotatef(-90,1.0f,.0f,.0f);
-    glTranslatef(.0f,.0f,1.2f);
-    gluCylinder(pObj,.24f,.24f,.03f,26,13);
+    glRotatef(-90, 1.0f, .0f, .0f);
+    glTranslatef(.0f, .0f, 1.2f);
+    gluCylinder(pObj, .24f, .24f, .03f, 26, 13);
     glPopMatrix();
     // Disco de cima (de baixo)
     glPushMatrix();
-    glRotatef(-90,1.0f,.0f,.0f);
-    glTranslatef(.0f,.0f,1.23f);
-    gluDisk(pObj,.0f,.24f,26,13);
+    glRotatef(-90, 1.0f, .0f, .0f);
+    glTranslatef(.0f, .0f, 1.23f);
+    gluDisk(pObj, .0f, .24f, 26, 13);
     glPopMatrix();
     // Disco de baixo (de baixo)
     glPushMatrix();
-    glRotatef(90,1.0f,.0f,.0f);
-    glTranslatef(.0f,.0f,-1.2f);
-    gluDisk(pObj,.0f,.24f,26,13);
+    glRotatef(90, 1.0f, .0f, .0f);
+    glTranslatef(.0f, .0f, -1.2f);
+    gluDisk(pObj, .0f, .24f, 26, 13);
     glPopMatrix();
-    // Disco de cima (de cima)
+    //// Disco de cima (de cima)
     glPushMatrix();
-    glRotatef(-90,1.0f,.0f,.0f);
-    glTranslatef(.0f,.0f,1.5f);
-    gluDisk(pObj,.0f,.14f,26,13);
+    glRotatef(-90, 1.0f, .0f, .0f);
+    glTranslatef(.0f, .0f, 1.5f);
+    gluDisk(pObj, .0f, .14f, 26, 13);
     glPopMatrix();
     // Parte de cima da cartola
     glPushMatrix();
-    glRotatef(-90,1.0f,.0f,.0f);
-    glTranslatef(.0f,.0f,1.2f);
-    gluCylinder(pObj,.14f,.14f,.30f,26,13);
+    glRotatef(-90, 1.0f, .0f, .0f);
+    glTranslatef(.0f, .0f, 1.2f);
+    gluCylinder(pObj, .14f, .14f, .30f, 26, 13);
     glPopMatrix();
-    
 
-    //Esse PopMatrix é necessário senao o bicho vai embora
+    // Boca
+    glPushMatrix();
+    glColor3f(0.0, 0.0, 0.0);
+    glTranslatef(0.0f, .94, .25f);
+    gluSphere(pObj, 0.02f, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0.07f, .96f, 0.25f);
+    gluSphere(pObj, 0.02f, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0.105f, .99f, 0.23f);
+    gluSphere(pObj, 0.02f, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-0.07f, .96f, 0.25f);
+    gluSphere(pObj, 0.02f, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-0.105f, .99f, 0.23f);
+    gluSphere(pObj, 0.02f, 26, 13);
+    glPopMatrix();
+
+    //Bracos
+    glColor3f(0.8,0.5,0.2);
+    //Esquerdo
+    glPushMatrix();
+	glTranslatef(0.20, 0.73, 0.0f);
+	glRotatef(90, 0.0f, 1.0f, .2f);
+	gluCylinder(pObj, 0.02f, 0.01f, 0.5f, 26, 13); 
+	glPopMatrix();
+    //Direito
+    glPushMatrix();
+	glTranslatef(-0.20, 0.73, 0.0f);
+	glRotatef(-90, 0.0f, 1.0f, .2f);
+	gluCylinder(pObj, 0.02f, 0.01f, 0.5f, 26, 13); 
+	glPopMatrix();
+    // Esse PopMatrix é necessário senao o bicho vai embora
     glPopMatrix();
 
     // Buffer swap
