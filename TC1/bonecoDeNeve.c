@@ -63,33 +63,20 @@ void SetupRC()
     // Black blue background
     glClearColor(0.25f, 0.25f, 0.50f, 1.0f);
 }
-
-// Respond to arrow keys (rotate bonecoDeNeve)
-void SpecialKeys(int key, int x, int y)
+void NormalKeys(unsigned char key, int x, int y)
 {
-
-    if (key == GLUT_KEY_LEFT)
-        yRot -= 5.0f;
-
-    if (key == GLUT_KEY_RIGHT)
-        yRot += 5.0f;
-    if(key == GLUT_KEY_DOWN)
-        xRot += 5.0f;
-    if(key == GLUT_KEY_UP)
-        xRot -= 5.0f;
-    if(key == GLUT_KEY_PAGE_UP)
-        zRot += 5.0f;
-    if(key == GLUT_KEY_PAGE_DOWN)
-        zRot -= 5.0f;
-
+    if(key == 'w') xRot -= 5.0f;
+    else if(key == 's') xRot += 5.0f;
+    else if(key == 'a') yRot -= 5.0f;
+    else if(key == 'd') yRot += 5.0f;
+    else if(key == 'q') zRot += 5.0f;
+    else if(key == 'e') zRot -= 5.0f;
     yRot = (GLfloat)((const int)yRot % 360);
     xRot = (GLfloat)((const int)xRot % 360);
     zRot = (GLfloat)((const int)zRot % 360);
-
-    // Refresh the Window
     glutPostRedisplay();
-}
 
+}
 // Called to draw scene
 void RenderScene(void)
 {
@@ -127,7 +114,7 @@ void RenderScene(void)
     glTranslatef(0.0f,.6f,0.0f);
     gluSphere(pObj, 0.32f,26,13);
     glPopMatrix();
-
+    
     // Cabeca
     glPushMatrix(); // save transform matrix state
     glTranslatef(0.0f, 1.0f, 0.0f);
@@ -203,7 +190,7 @@ int main(int argc, char *argv[])
     glutInitWindowSize(800, 600);
     glutCreateWindow("BonecoDeNeve");
     glutReshapeFunc(ChangeSize);
-    glutSpecialFunc(SpecialKeys);
+    glutKeyboardFunc(NormalKeys);
     glutDisplayFunc(RenderScene);
     SetupRC();
     glutMainLoop();
