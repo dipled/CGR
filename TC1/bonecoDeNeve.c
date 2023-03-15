@@ -1,11 +1,11 @@
 // gcc bonecoDeNeve.c -lglut -lGL -lGLU -lm -o bonecoDeNeve && ./bonecoDeNeve
-
 #include <GL/glut.h>
 
 // Rotation
 static GLfloat yRot = 0.0f;
 static GLfloat xRot = 0.0f;
 static GLfloat zRot = 0.0f;
+static GLfloat camDistance = 35.0;
 // Change viewing volume and viewport.  Called when window is resized
 void ChangeSize(int w, int h)
 {
@@ -25,8 +25,7 @@ void ChangeSize(int w, int h)
     glLoadIdentity();
 
     // Produce the perspective projection
-    gluPerspective(35.0f, fAspect, 1.0, 40.0);
-
+    gluPerspective(camDistance, fAspect, 1.0, 40.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -34,7 +33,6 @@ void ChangeSize(int w, int h)
 // This function does any needed initialization on the rendering context.  Here it sets up and initializes the lighting for the scene.
 void SetupRC()
 {
-
     // Light values and coordinates
     GLfloat whiteLight[] = {0.05f, 0.05f, 0.05f, 1.0f};
     GLfloat sourceLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
@@ -60,11 +58,14 @@ void SetupRC()
     // Set Material properties to follow glColor values
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
-    // Black blue background
-    glClearColor(0.25f, 0.25f, 0.50f, 1.0f);
+    glClearColor(0.7f, 0.7f, 0.70f, 1.0f);
 }
 void NormalKeys(unsigned char key, int x, int y)
 {
+    if(key == 'z')
+        camDistance += 5;
+    else if (key == 'x')
+        camDistance -= 5;
     if (key == 'w')
         xRot -= 5.0f;
     else if (key == 's')
@@ -75,12 +76,14 @@ void NormalKeys(unsigned char key, int x, int y)
         yRot += 5.0f;
     else if (key == 'q')
         zRot += 5.0f;
-    else if (key == 'e')
+    else if (key == 'e')    
         zRot -= 5.0f;
     yRot = (GLfloat)((const int)yRot % 360);
     xRot = (GLfloat)((const int)xRot % 360);
     zRot = (GLfloat)((const int)zRot % 360);
     glutPostRedisplay();
+    //Nao quebra o aspect ratio nem nada :)
+    ChangeSize(glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_WINDOW_HEIGHT));
 }
 // Called to draw scene
 void RenderScene(void)
@@ -217,6 +220,57 @@ void RenderScene(void)
 	glRotatef(-90, 0.0f, 1.0f, .2f);
 	gluCylinder(pObj, 0.02f, 0.01f, 0.5f, 26, 13); 
 	glPopMatrix();
+    //Maos
+    //Esquerda
+    glPushMatrix();
+	glTranslatef(0.67, 0.825, 0.02f);
+	glRotatef(90,-1.0f, 1.0f, 0.0f);
+	gluCylinder(pObj, 0.01f, 0.01f, 0.2f, 26, 13); 
+	glPopMatrix();
+    glPushMatrix();
+	glTranslatef(0.67, 0.825, 0.02f);
+	glRotatef(90,.0f, 1.0f, 0.0f);
+	gluCylinder(pObj, 0.01f, 0.01f, 0.2f, 26, 13); 
+	glPopMatrix();
+    glPushMatrix();
+	glTranslatef(0.67, 0.825, 0.02f);
+	glRotatef(90,1.0f, 1.0f, 0.0f);
+	gluCylinder(pObj, 0.01f, 0.01f, 0.2f, 26, 13); 
+	glPopMatrix();
+    //Direita
+    glPushMatrix();
+	glTranslatef(-0.67, 0.825, 0.02f);
+	glRotatef(-90,-1.0f, 1.0f, 0.0f);
+	gluCylinder(pObj, 0.01f, 0.01f, 0.2f, 26, 13); 
+	glPopMatrix();
+    glPushMatrix();
+	glTranslatef(-0.67, 0.825, 0.02f);
+	glRotatef(-90,.0f, 1.0f, 0.0f);
+	gluCylinder(pObj, 0.01f, 0.01f, 0.2f, 26, 13); 
+	glPopMatrix();
+    glPushMatrix();
+	glTranslatef(-0.67, 0.825, 0.02f);
+	glRotatef(-90,1.0f, 1.0f, 0.0f);
+	gluCylinder(pObj, 0.01f, 0.01f, 0.2f, 26, 13); 
+	glPopMatrix();
+
+
+    //Botoes
+    glColor3f(0,0,0);
+    glPushMatrix();
+    glTranslatef(0.0f, .72f, 0.3f);
+    gluSphere(pObj, 0.03f, 26, 13);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, .61f, 0.33f);
+    gluSphere(pObj, 0.03f, 26, 13);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, .50f, 0.3f);
+    gluSphere(pObj, 0.03f, 26, 13);
+    glPopMatrix();
     // Esse PopMatrix é necessário senao o bicho vai embora
     glPopMatrix();
 
