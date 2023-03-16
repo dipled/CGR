@@ -209,7 +209,7 @@ void RenderScene(void)
     glutSolidCube(0.5);
     glPopMatrix();
 
-    // detalhe nos muros
+    // Detalhe nos muros
     glPushMatrix();
     glTranslatef(0.0, 0.5, 0.4);
     glScalef(0.2, 0.2, 0.3);
