@@ -5,7 +5,7 @@
 static GLfloat yRot = 0.0f;
 static GLfloat xRot = 0.0f;
 static GLfloat zRot = 0.0f;
-static GLfloat camDistance = 35.0;
+static GLfloat zoom = -5.0;
 // Change viewing volume and viewport.  Called when window is resized
 void ChangeSize(int w, int h)
 {
@@ -25,7 +25,7 @@ void ChangeSize(int w, int h)
     glLoadIdentity();
 
     // Produce the perspective projection
-    gluPerspective(camDistance, fAspect, 1.0, 40.0);
+    gluPerspective(35.0, fAspect, 1.0, 40.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -62,10 +62,10 @@ void SetupRC()
 }
 void NormalKeys(unsigned char key, int x, int y)
 {
-    if(key == 'z')
-        camDistance += 5;
+    if (key == 'z')
+        zoom += .3;
     else if (key == 'x')
-        camDistance -= 5;
+        zoom -= .3;
     if (key == 'w')
         xRot -= 5.0f;
     else if (key == 's')
@@ -98,7 +98,7 @@ void RenderScene(void)
     glPushMatrix();
 
     // Move object back and do in place rotation
-    glTranslatef(0.0f, -1.0f, -5.0f);
+    glTranslatef(0.0f, -1.0f, zoom);
     // Rotacionar no y
     glRotatef(yRot, 0.0f, 1.0f, 0.0f);
     // Rotacionar no x
