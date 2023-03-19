@@ -62,22 +62,34 @@ void SetupRC()
 }
 void NormalKeys(unsigned char key, int x, int y)
 {
-    if (key == 'z')
+        switch (key)
+
+    {
+    case 'z':
         zoom += .3;
-    else if (key == 'x')
+        break;
+    case 'x':
         zoom -= .3;
-    if (key == 'w')
+        break;
+    case 'w':
         xRot -= 5.0f;
-    else if (key == 's')
+        break;
+    case 's':
         xRot += 5.0f;
-    else if (key == 'a')
+        break;
+    case 'a':
         yRot -= 5.0f;
-    else if (key == 'd')
+        break;
+    case 'd':
         yRot += 5.0f;
-    else if (key == 'q')
+        break;
+    case 'q':
         zRot += 5.0f;
-    else if (key == 'e')    
+        break;
+    case 'e':
         zRot -= 5.0f;
+        break;
+    }
     yRot = (GLfloat)((const int)yRot % 360);
     xRot = (GLfloat)((const int)xRot % 360);
     zRot = (GLfloat)((const int)zRot % 360);

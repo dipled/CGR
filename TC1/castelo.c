@@ -63,22 +63,34 @@ void SetupRC()
 
 void NormalKeys(unsigned char key, int x, int y)
 {
-    if (key == 'z')
+        switch (key)
+
+    {
+    case 'z':
         zoom += .3;
-    else if (key == 'x')
+        break;
+    case 'x':
         zoom -= .3;
-    if (key == 'w')
+        break;
+    case 'w':
         xRot -= 5.0f;
-    else if (key == 's')
+        break;
+    case 's':
         xRot += 5.0f;
-    else if (key == 'a')
+        break;
+    case 'a':
         yRot -= 5.0f;
-    else if (key == 'd')
+        break;
+    case 'd':
         yRot += 5.0f;
-    else if (key == 'q')
+        break;
+    case 'q':
         zRot += 5.0f;
-    else if (key == 'e')
+        break;
+    case 'e':
         zRot -= 5.0f;
+        break;
+    }
     yRot = (GLfloat)((const int)yRot % 360);
     xRot = (GLfloat)((const int)xRot % 360);
     zRot = (GLfloat)((const int)zRot % 360);
@@ -380,7 +392,6 @@ void RenderScene(void)
     glScalef(0.1, 0.2, 0.05);
     glutSolidCube(0.5);
     glPopMatrix();
-    glColor3f(0.0, 0.0, 0.0);
     glPushMatrix();
     glTranslatef(1.2, 0.6, -2.19);
     glScalef(0.1, 0.2, 0.05);
@@ -389,50 +400,6 @@ void RenderScene(void)
     glPushMatrix();
     glTranslatef(-1.2, 0.6, -2.19);
     glScalef(0.1, 0.2, 0.05);
-    glutSolidCube(0.5);
-    glPopMatrix();
-
-    // bandeiras
-    glPushMatrix();
-    glTranslatef(-1.2, 1.39, 0.4);
-    glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.008, 0.008, 0.3, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(1.2, 1.39, 0.4);
-    glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.008, 0.008, 0.3, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-1.2, 1.39, -2.0);
-    glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.008, 0.008, 0.3, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(1.2, 1.39, -2.0);
-    glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.008, 0.008, 0.3, 26, 13);
-    glPopMatrix();
-
-    glColor3f(1.0, 1.0, 0.0);
-    glPushMatrix();
-    glTranslatef(-1.15, 1.353, 0.4);
-    glScalef(0.16, 0.16, 0.03);
-    glutSolidCube(0.5);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(1.25, 1.353, 0.4);
-    glScalef(0.16, 0.16, 0.03);
-    glutSolidCube(0.5);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-1.15, 1.353, -2.0);
-    glScalef(0.16, 0.16, 0.03);
-    glutSolidCube(0.5);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(1.25, 1.353, -2.0);
-    glScalef(0.16, 0.16, 0.03);
     glutSolidCube(0.5);
     glPopMatrix();
 
