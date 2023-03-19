@@ -182,53 +182,49 @@ void RenderScene(void)
     // head
     glColor3f(0.7f, 0.7f, 0.7f);
     glPushMatrix(); // save transform matrix state
-    glTranslatef(0.0f, 1.5f, 0.0f);
-    gluSphere(pObj, 0.24f, 26, 13);
+    glTranslatef(0.0f, 1.45f, 0.0f);
+    glScalef(.8, 1.05, 1);
+    glutSolidCube(0.4);
     glPopMatrix(); // restore transform matrix state
     glPushMatrix();
-    glTranslatef(0.23f, 1.5f, 0.0f);
-    glRotatef(90.0f, 0.0f, 5.0f, 0.0f);
+    glTranslatef(0.0f, 1.77, 0.0f);
+    glRotatef(90.0f, 1.0f, .0f, 0.0f);
     gluCylinder(pObj, 0.02f, 0.02f, 0.15f, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-0.38f, 1.5f, 0.0f);
-    glRotatef(90.0f, 0.0f, 5.0f, 0.0f);
-    gluCylinder(pObj, 0.02f, 0.02f, 0.15f, 26, 13);
-    glPopMatrix();
     glPushMatrix();
-    glTranslatef(0.4f, 1.5f, 0.0f);
-    gluSphere(pObj, 0.045f, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-0.40f, 1.5f, 0.0f);
-    gluSphere(pObj, 0.045f, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(0.23f, 1.5f, 0.0f);
-    gluSphere(pObj, 0.05f, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-0.23f, 1.5f, 0.0f);
+    glTranslatef(0.0f, 1.77f, 0.0f);
     gluSphere(pObj, 0.05f, 26, 13);
     glPopMatrix();
 
     // eyes
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glColor3f(.0f, 1.0f, .3f);
     glPushMatrix();
-    glTranslatef(-0.08f, 1.56f, 0.18f);
+    glTranslatef(-0.08f, 1.56f, 0.22f);
     gluSphere(pObj, 0.045f, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(0.08f, 1.56f, 0.18f);
+    glTranslatef(0.08f, 1.56f, 0.22f);
     gluSphere(pObj, 0.045f, 26, 13);
     glPopMatrix();
 
     // mouth
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor3f(.0f, 0.0f, 0.0f);
     glPushMatrix();
-    glTranslatef(0.0, 1.45, 0.233f);
-    glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
-    glScalef(0.2f, 0.05f, 0.02f);
+    glTranslatef(0.0, 1.45, 0.2f);
+    glScalef(0.4f, 0.08f, 0.02f);
+    glutSolidCube(0.5);
+    glPopMatrix();
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glPushMatrix();
+    glTranslatef(0.05, 1.41, 0.2f);
+    glScalef(0.2f, 0.08f, 0.02f);
+    glutSolidCube(0.5);
+    glPopMatrix();
+    glColor3f(.0f, 0.0f, 0.0f);
+    glPushMatrix();
+    glTranslatef(-.02, 1.41, 0.2f);
+    glScalef(0.08f, 0.08f, 0.02f);
     glutSolidCube(0.5);
     glPopMatrix();
 
@@ -328,28 +324,28 @@ void RenderScene(void)
 
     // foot
     glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28-sin(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28, - cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28-cos(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28);
+    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
     gluSphere(pObj, 0.05f, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28-sin(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28, - cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28-cos(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28);
+    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
     gluCylinder(pObj, 0.05f, 0.03f, 0.2f, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28-sin(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28, - cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28-cos(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28+0.2);
+    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28 + 0.2);
     gluSphere(pObj, 0.03f, 26, 13);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28-sin(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28, - cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28-cos(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28);
+    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
     gluSphere(pObj, 0.05f, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28-sin(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28, - cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28-cos(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28);
+    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
     gluCylinder(pObj, 0.05f, 0.03f, 0.2f, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28-sin(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28, - cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28-cos(PI/2-(rotacaoPerna+rotacaoJoelho)*PI/180)*0.28+0.2);
+    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28 + 0.2);
     gluSphere(pObj, 0.03f, 26, 13);
     glPopMatrix();
 
