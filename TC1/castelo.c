@@ -132,24 +132,24 @@ void RenderScene(void)
     // Telhados
     glColor3f(1.0, 0.2, 0.0);
     glPushMatrix();
-    glTranslatef(1.2, 1.15, 0.4);
+    glTranslatef(1.2, 1.35, 0.4);
     glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.0, 0.26, 0.4, 26, 13);
+    gluCylinder(pObj, 0.0, 0.26, 0.6, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-1.2, 1.15, -2.0);
+    glTranslatef(-1.2, 1.35, -2.0);
     glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.0, 0.26, 0.4, 26, 13);
+    gluCylinder(pObj, 0.0, 0.26, 0.6, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-1.2, 1.15, 0.4);
+    glTranslatef(-1.2, 1.35, 0.4);
     glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.0, 0.26, 0.4, 26, 13);
+    gluCylinder(pObj, 0.0, 0.26, 0.6, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(1.2, 1.15, -2.0);
+    glTranslatef(1.2, 1.35, -2.0);
     glRotatef(90.0, 5.0, 0.0, 0.0);
-    gluCylinder(pObj, 0.0, 0.26, 0.4, 26, 13);
+    gluCylinder(pObj, 0.0, 0.26, 0.6, 26, 13);
     glPopMatrix();
 
     // Torres
@@ -364,29 +364,6 @@ void RenderScene(void)
     glTranslatef(-1.2, 0.5, 0.1);
     glRotatef(90.0, 0.0, 1.0, 0.0);
     glScalef(0.2, 0.2, 0.3);
-    glutSolidCube(0.5);
-    glPopMatrix();
-
-    // janelas
-    glColor3f(0.0, 0.0, 0.0);
-    glPushMatrix();
-    glTranslatef(1.2, 0.6, 0.59);
-    glScalef(0.1, 0.2, 0.05);
-    glutSolidCube(0.5);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-1.2, 0.6, 0.59);
-    glScalef(0.1, 0.2, 0.05);
-    glutSolidCube(0.5);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(1.2, 0.6, -2.19);
-    glScalef(0.1, 0.2, 0.05);
-    glutSolidCube(0.5);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-1.2, 0.6, -2.19);
-    glScalef(0.1, 0.2, 0.05);
     glutSolidCube(0.5);
     glPopMatrix();
 
