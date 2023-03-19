@@ -123,10 +123,9 @@ void RenderScene(void)
 
     // Chao
     glPushMatrix();
-    glColor3f(0.0, .30, 0.0);
-    glTranslatef(0.0, 0.0, -0.8);
-    glRotatef(-90.0, 1.0, 0.0, 0.0);
-    glScalef(7.0, 7.0, 0.05);
+    glColor3f(0.0, .9, 0.0);
+    glTranslatef(0.0, -.17, -0.8);
+    glScalef(7.0, .7, 7);
     glutSolidCube(0.5);
     glPopMatrix();
 
@@ -154,7 +153,7 @@ void RenderScene(void)
     glPopMatrix();
 
     // Torres
-    glColor3f(0.8, 0.8, 0.8);
+    glColor3f(0.6, 0.6, 0.6);
     glPushMatrix();
     glTranslatef(1.2, 0.8, 0.4);
     glRotatef(90.0, 5.0, 0.0, 0.0);
@@ -177,7 +176,7 @@ void RenderScene(void)
     glPopMatrix();
 
     // Muro Principal
-    glColor3f(0.6, 0.6, 0.6);
+    glColor3f(0.3, 0.3, 0.3);
     glPushMatrix();
     glTranslatef(-0.6, 0.25, 0.4);
     glScalef(1.8, 1.0, 0.3);
@@ -193,16 +192,8 @@ void RenderScene(void)
     glScalef(1.0, 0.5, 0.3);
     glutSolidCube(0.5);
     glPopMatrix();
-    // Porta
-    glColor3f(.3, 0, 0);
-    glPushMatrix();
-    glTranslatef(0.0, .136, .4);
-    glScalef(.6, .48, .3);
-    glutSolidCube(.5);
-    glPopMatrix();
-    // Muros
-    glColor3f(0.6, 0.6, 0.6);
 
+    // Muros
     glPushMatrix();
     glTranslatef(0.0, 0.25, -2.0);
     glScalef(4.0, 1.0, 0.3);
@@ -221,12 +212,8 @@ void RenderScene(void)
     glutSolidCube(0.5);
     glPopMatrix();
 
-    // Detalhe nos muros
-    glPushMatrix();
-    glTranslatef(0.0, 0.5, 0.4);
-    glScalef(0.2, 0.2, 0.3);
-    glutSolidCube(0.5);
-    glPopMatrix();
+
+    // Detalhe
     glPushMatrix();
     glTranslatef(0.3, 0.5, 0.4);
     glScalef(0.2, 0.2, 0.3);
@@ -406,41 +393,88 @@ void RenderScene(void)
     // arvore
     glColor3f(0.7, 0.35, 0.25);
     glPushMatrix();
-    glTranslatef(0.4, 0.4, -0.8);
+    glTranslatef(0.4, 0.2, -0.8);
     glRotatef(90.0, 5.0, 0.0, 0.0);
     gluCylinder(pObj, 0.05, 0.05, 0.3, 26, 13);
     glPopMatrix();
     glColor3f(0.0, 1.0, 0.0);
     glPushMatrix();
-    glTranslatef(0.4, 0.7, -0.8);
+    glTranslatef(0.4, 0.5, -0.8);
     glRotatef(90.0, 5.0, 0.0, 0.0);
     gluCylinder(pObj, 0.0, 0.13, 0.38, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(0.4, 0.8, -0.8);
+    glTranslatef(0.4, 0.6, -0.8);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.0, 0.09, 0.3, 26, 13);
+    glPopMatrix();
+    
+
+    glColor3f(0.7, 0.35, 0.25);
+    glPushMatrix();
+    glTranslatef(-0.4, 0.2, -0.8);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.05, 0.05, 0.3, 26, 13);
+    glColor3f(0.0, 1.0, 0.0);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-0.4, 0.6, -0.8);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.0, 0.09, 0.3, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-0.4, 0.5, -0.8);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.0, 0.13, 0.38, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-0.4, 0.6, -0.8);
     glRotatef(90.0, 5.0, 0.0, 0.0);
     gluCylinder(pObj, 0.0, 0.09, 0.3, 26, 13);
     glPopMatrix();
 
     glColor3f(0.7, 0.35, 0.25);
     glPushMatrix();
-    glTranslatef(-0.4, 0.4, -0.8);
+    glTranslatef(1.5, 0.2, 0.0);
     glRotatef(90.0, 5.0, 0.0, 0.0);
     gluCylinder(pObj, 0.05, 0.05, 0.3, 26, 13);
     glColor3f(0.0, 1.0, 0.0);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-0.4, 0.8, -0.8);
+    glTranslatef(1.5, 0.6, 0.0);
     glRotatef(90.0, 5.0, 0.0, 0.0);
     gluCylinder(pObj, 0.0, 0.09, 0.3, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-0.4, 0.7, -0.8);
+    glTranslatef(1.5, 0.5, 0.0);
     glRotatef(90.0, 5.0, 0.0, 0.0);
     gluCylinder(pObj, 0.0, 0.13, 0.38, 26, 13);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-0.4, 0.8, -0.8);
+    glTranslatef(1.5, 0.6, 0.0);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.0, 0.09, 0.3, 26, 13);
+    glPopMatrix();
+
+    glColor3f(0.7, 0.35, 0.25);
+    glPushMatrix();
+    glTranslatef(-1.5, 0.2, 0.0);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.05, 0.05, 0.3, 26, 13);
+    glColor3f(0.0, 1.0, 0.0);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-1.5, 0.6, 0.0);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.0, 0.09, 0.3, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-1.5, 0.5, 0.0);
+    glRotatef(90.0, 5.0, 0.0, 0.0);
+    gluCylinder(pObj, 0.0, 0.13, 0.38, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-1.5, 0.6, 0.0);
     glRotatef(90.0, 5.0, 0.0, 0.0);
     gluCylinder(pObj, 0.0, 0.09, 0.3, 26, 13);
     glPopMatrix();
