@@ -285,7 +285,7 @@ void RenderScene(void)
 
     // legs
     glPushMatrix();
-    glTranslatef(0.15f, 0.65f, 0.0f);
+    glTranslatef(0.15f, 0.63f, 0.0f);
     gluSphere(pObj, 0.08f, 26, 13);
     glPopMatrix();
     glPushMatrix();
@@ -304,7 +304,7 @@ void RenderScene(void)
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(-0.15f, 0.65f, 0.0f);
+    glTranslatef(-0.15f, 0.63f, 0.0f);
     gluSphere(pObj, 0.08f, 26, 13);
     glPopMatrix();
     glPushMatrix();
