@@ -1,11 +1,14 @@
+CC = gcc
+FLAGS = -c -Wall
+LIBS = -lglut -lGL -lGLU -lm 
 all: robo castelo bonecoDeNeve
 
 robo: 
-	gcc robo.c -lglut -lGL -lGLU -lm -o robo.out
+	${CC} robo.c ${LIBS} -o robo.out
 clean:
-	rm -rf *.out
+	rm  *.out
 castelo:
-	gcc castelo.c -lglut -lGL -lGLU -lm -o castelo.out
+	${CC} castelo.c ${LIBS} -o castelo.out
 bonecoDeNeve:
-	gcc bonecoDeNeve.c -lglut -lGL -lGLU -lm -o bonecoDeNeve.out
+	${CC} bonecoDeNeve.c ${LIBS} -o bonecoDeNeve.out
 
