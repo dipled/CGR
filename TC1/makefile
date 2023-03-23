@@ -8,3 +8,4 @@ castelo:
 	gcc castelo.c -lglut -lGL -lGLU -lm -o castelo.out
 bonecoDeNeve:
 	gcc bonecoDeNeve.c -lglut -lGL -lGLU -lm -o bonecoDeNeve.out
+
