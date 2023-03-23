@@ -3,7 +3,7 @@ all: robo castelo bonecoDeNeve
 robo: 
 	gcc robo.c -lglut -lGL -lGLU -lm -o robo.out
 clean:
-	rm -rf *.o *.out
+	rm -rf *.out
 castelo:
 	gcc castelo.c -lglut -lGL -lGLU -lm -o castelo.out
 bonecoDeNeve:
