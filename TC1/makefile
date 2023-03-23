@@ -3,12 +3,23 @@ FLAGS = -c -Wall
 LIBS = -lglut -lGL -lGLU -lm 
 all: robo castelo bonecoDeNeve
 
-robo: 
-	${CC} robo.c ${LIBS} -o robo.out
 clean:
-	rm  *.out
-castelo:
-	${CC} castelo.c ${LIBS} -o castelo.out
-bonecoDeNeve:
-	${CC} bonecoDeNeve.c ${LIBS} -o bonecoDeNeve.out
+	rm  *.out *.o
 
+casteloC: 
+	${CC} ${FLAGS} castelo.c
+
+castelo: casteloC
+	${CC}  castelo.o ${LIBS} -o castelo.out
+
+bonecoDeNeve: bonecoDeNeveC
+	${CC} bonecoDeNeve.o ${LIBS} -o bonecoDeNeve.out
+
+bonecoDeNeveC:
+	${CC} ${FLAGS} bonecoDeNeve.c
+
+robo: roboC
+	${CC} robo.o ${LIBS} -o robo.out
+
+roboC:
+	${CC} ${FLAGS} robo.c 
