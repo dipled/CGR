@@ -3,8 +3,8 @@
 #define PI 3.14159265358979323846
 static double rotacaoBraco = 0;
 static double rotacaoCotovelo = 0;
+static double rotacaoCoxa = 0;
 static double rotacaoPerna = 0;
-static double rotacaoJoelho = 0;
 // Rotation
 static GLfloat yRot = 0.0f;
 static GLfloat xRot = 0.0f;
@@ -32,26 +32,6 @@ void ChangeSize(int w, int h)
     gluPerspective(35.0, fAspect, 1.0, 40.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-}
-
-void giraBraco(void)
-{
-    glRotatef((GLfloat)rotacaoBraco, 1, 0, 0);
-}
-
-void giraCotovelo(void)
-{
-    glRotatef((GLfloat)rotacaoCotovelo, 1, 0, 0);
-}
-
-void giraPerna(void)
-{
-    glRotatef((GLfloat)rotacaoPerna, 1, 0, 0);
-}
-
-void giraJoelho(void)
-{
-    glRotatef((GLfloat)rotacaoJoelho, 1, 0, 0);
 }
 
 // This function does any needed initialization on the rendering context.  Here it sets up and initializes the lighting for the scene.
@@ -133,19 +113,19 @@ void NormalKeys(unsigned char key, int x, int y)
         glutPostRedisplay();
         break;
     case 'c':
-        rotacaoPerna = ((int)rotacaoPerna + 5) % 360;
+        rotacaoCoxa = ((int)rotacaoCoxa + 5) % 360;
         glutPostRedisplay();
         break;
     case 'v':
-        rotacaoPerna = ((int)rotacaoPerna - 5) % 360;
+        rotacaoCoxa = ((int)rotacaoCoxa - 5) % 360;
         glutPostRedisplay();
         break;
     case 'b':
-        rotacaoJoelho = ((int)rotacaoJoelho + 5) % 360;
+        rotacaoPerna = ((int)rotacaoPerna + 5) % 360;
         glutPostRedisplay();
         break;
     case 'n':
-        rotacaoJoelho = ((int)rotacaoJoelho - 5) % 360;
+        rotacaoPerna = ((int)rotacaoPerna - 5) % 360;
         glutPostRedisplay();
         break;
     }
@@ -156,30 +136,10 @@ void NormalKeys(unsigned char key, int x, int y)
     // Nao quebra o aspect ratio nem nada :)
     ChangeSize(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
-
-// Called to draw scene
-void RenderScene(void)
+void DrawHead()
 {
-
-    GLUquadricObj *pObj; // Quadric Object
-
-    // Clear the window with current clearing color
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Save the matrix state and do the rotations
-    glPushMatrix();
-
-    // Move object back and do in place rotation
-    glTranslatef(0.0, -1.0, zoom);
-    glRotatef(yRot, 0.0, 1.0, 0.0);
-    glRotatef(xRot, 1.0, 0.0, 0.0);
-    glRotatef(zRot, 0.0, 0.0, 1.0);
-
-    // Draw something
+    GLUquadricObj *pObj;
     pObj = gluNewQuadric();
-    gluQuadricNormals(pObj, GLU_SMOOTH);
-
-    // head
     glColor3f(0.7f, 0.7f, 0.7f);
     glPushMatrix(); // save transform matrix state
     glTranslatef(0.0f, 1.45f, 0.0f);
@@ -227,127 +187,176 @@ void RenderScene(void)
     glScalef(0.08f, 0.08f, 0.02f);
     glutSolidCube(0.5);
     glPopMatrix();
-
-    // body
+}
+void DrawBody()
+{
     glColor3f(0.7f, 0.7f, 0.7f);
     glPushMatrix();
     glTranslatef(0.0, 0.9645, 0.0f);
     glScalef(0.8f, 1.2f, 0.8f);
     glutSolidCube(0.5);
     glPopMatrix();
-
-    // arms
+}
+void DrawArms()
+{
+    GLUquadricObj *ombroDireito, *ombroEsquerdo, *bracoDireito, *bracoEsquerdo, *cotoveloDireito, *cotoveloEsquerdo,*anteEsquerdo,*anteDireito,*maoEsquerda,*maoDireita;
+    ombroEsquerdo = gluNewQuadric();
+    bracoEsquerdo = gluNewQuadric();
+    cotoveloEsquerdo = gluNewQuadric();
+    anteEsquerdo = gluNewQuadric();
+    maoEsquerda = gluNewQuadric();
     glPushMatrix();
     glTranslatef(0.22f, 1.22f, 0.0f);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    gluSphere(ombroEsquerdo, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(0.24f, 1.2f, 0.0f);
+    glTranslatef(0.0, 0, 0.0f);
     glRotatef(90 + rotacaoBraco, 1.0f, 0.0f, 0.0f);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.2f, 26, 13);
-    glPopMatrix();
+    gluCylinder(bracoEsquerdo, 0.05f, 0.05f, 0.2f, 26, 13);
     glPushMatrix();
-    glTranslatef(0.24f, 1.2 - sin(PI / 2 - rotacaoBraco * PI / 180) * 0.2, -cos(PI / 2 - rotacaoBraco * PI / 180) * 0.2f);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    glTranslatef(0.0, .0, 0.2);
+    gluSphere(cotoveloEsquerdo, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(0.24f, 1.2 - sin(PI / 2 - rotacaoBraco * PI / 180) * 0.2, -cos(PI / 2 - rotacaoBraco * PI / 180) * 0.2f);
-    glRotatef(rotacaoBraco + rotacaoCotovelo, 1, 0, 0);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.28f, 26, 13);
-    glPopMatrix();
+    glTranslatef(0,0, 0);
+    glRotatef(rotacaoCotovelo-90, 1, 0, 0);
+    gluCylinder(anteEsquerdo, 0.05f, 0.05f, 0.28f, 26, 13);
     glPushMatrix();
-    glTranslatef(0.24f, 1.2 - sin(PI / 2 - rotacaoBraco * PI / 180) * 0.2 - sin((rotacaoBraco + rotacaoCotovelo) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoBraco * PI / 180) * 0.2 + cos((rotacaoCotovelo + rotacaoBraco) * PI / 180) * 0.28);
-    gluSphere(pObj, 0.08f, 26, 13);
+    glTranslatef(0.0,.0,0.28);
+    gluSphere(maoEsquerda, 0.08f, 26, 13);
     glPopMatrix();
-
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    ombroDireito = gluNewQuadric();
+    bracoDireito = gluNewQuadric();
+    cotoveloDireito = gluNewQuadric();
+    anteDireito = gluNewQuadric();
+    maoDireita = gluNewQuadric();
     glPushMatrix();
     glTranslatef(-0.22f, 1.22f, 0.0f);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    gluSphere(ombroDireito, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(-0.24f, 1.2f, 0.0f);
+    glTranslatef(0.0, 0, 0.0f);
     glRotatef(90 + rotacaoBraco, 1.0f, 0.0f, 0.0f);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.2f, 26, 13);
-    glPopMatrix();
+    gluCylinder(bracoDireito, 0.05f, 0.05f, 0.2f, 26, 13);
     glPushMatrix();
-    glTranslatef(-0.24, 1.2 - sin(PI / 2 - rotacaoBraco * PI / 180) * 0.2, -cos(PI / 2 - rotacaoBraco * PI / 180) * 0.2f);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    glTranslatef(0.0, .0, 0.2);
+    gluSphere(cotoveloDireito, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(-0.24f, 1.2 - sin(PI / 2 - rotacaoBraco * PI / 180) * 0.2, -cos(PI / 2 - rotacaoBraco * PI / 180) * 0.2f);
-    glRotatef(rotacaoBraco + rotacaoCotovelo, 1, 0, 0);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.28f, 26, 13);
-    glPopMatrix();
+    glTranslatef(0,0, 0);
+    glRotatef(rotacaoCotovelo-90, 1, 0, 0);
+    gluCylinder(anteDireito, 0.05f, 0.05f, 0.28f, 26, 13);
     glPushMatrix();
-    glTranslatef(-0.24f, 1.2 - sin(PI / 2 - rotacaoBraco * PI / 180) * 0.2 - sin((rotacaoBraco + rotacaoCotovelo) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoBraco * PI / 180) * 0.2 + cos((rotacaoCotovelo + rotacaoBraco) * PI / 180) * 0.28);
-    gluSphere(pObj, 0.08f, 26, 13);
+    glTranslatef(0.0,.0,0.28);
+    gluSphere(maoDireita, 0.08f, 26, 13);
     glPopMatrix();
-
-    // legs
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+}
+void DrawLegs()
+{
+    GLUquadricObj *coxaEsquerda, *coxaDireita, *cusetEsquerdo, *cusetDireito, *pernaEsquerda, *pernaDireita, *calcanharDireito, *calcanharEsquerdo, *joelhoEsquerdo, *joelhoDireito, *peDireito, *peEsquerdo;
+    GLUquadricObj *tampaoDireito, *tampaoEsquerdo;
+    coxaEsquerda = gluNewQuadric();
+    cusetEsquerdo = gluNewQuadric();
+    pernaEsquerda = gluNewQuadric();
+    calcanharEsquerdo = gluNewQuadric();
+    joelhoEsquerdo = gluNewQuadric();
+    peEsquerdo = gluNewQuadric();
+    tampaoEsquerdo = gluNewQuadric();
     glPushMatrix();
     glTranslatef(0.15f, 0.63f, 0.0f);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    gluSphere(cusetEsquerdo, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(0.15f, 0.6f, 0.0f);
-    glRotatef(90.0 + rotacaoPerna, 1.0f, 0.0f, 0.0f);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.28f, 26, 13);
-    glPopMatrix();
+    glRotatef(90.0 + rotacaoCoxa, 1.0f, 0.0f, 0.0f);
+    gluCylinder(coxaEsquerda, 0.05f, 0.05f, 0.28f, 26, 13);
     glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    glTranslatef(0.0,0.0,0.28);
+    gluSphere(joelhoEsquerdo, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28);
-    glRotatef(90.0 + rotacaoPerna + rotacaoJoelho, 1.0f, 0.0f, 0.0f);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.28f, 26, 13);
+    glRotatef(rotacaoPerna, 1.0f, 0.0f, 0.0f);
+    gluCylinder(pernaEsquerda, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0,0.0,0.28);
+    gluSphere(calcanharEsquerdo, 0.05f, 26, 13);
+    glPushMatrix();
+    glRotatef(-90,1.0,0.0,0.0);
+    gluCylinder(peEsquerdo, 0.05f, 0.03f, 0.2f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0,0.0,.2);
+    gluSphere(tampaoEsquerdo, 0.03f, 26, 13);
     glPopMatrix();
-
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    coxaDireita = gluNewQuadric();
+    cusetDireito = gluNewQuadric();
+    pernaDireita = gluNewQuadric();
+    calcanharDireito = gluNewQuadric();
+    joelhoDireito = gluNewQuadric();
+    peDireito = gluNewQuadric();
+    tampaoDireito = gluNewQuadric();
     glPushMatrix();
     glTranslatef(-0.15f, 0.63f, 0.0f);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    gluSphere(cusetDireito, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(-0.15f, 0.6f, 0.0f);
-    glRotatef(90 + rotacaoPerna, 5.0f, 0.0f, 0.0f);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.28f, 26, 13);
-    glPopMatrix();
+    glRotatef(90.0 + rotacaoCoxa, 1.0f, 0.0f, 0.0f);
+    gluCylinder(coxaDireita, 0.05f, 0.05f, 0.28f, 26, 13);
     glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28);
-    gluSphere(pObj, 0.08f, 26, 13);
-    glPopMatrix();
+    glTranslatef(0.0,0.0,0.28);
+    gluSphere(joelhoDireito, 0.08f, 26, 13);
     glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28);
-    glRotatef(90.0 + rotacaoPerna + rotacaoJoelho, 1.0f, 0.0f, 0.0f);
-    gluCylinder(pObj, 0.05f, 0.05f, 0.28f, 26, 13);
+    glRotatef(rotacaoPerna, 1.0f, 0.0f, 0.0f);
+    gluCylinder(pernaDireita, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0,0.0,0.28);
+    gluSphere(calcanharDireito, 0.05f, 26, 13);
+    glPushMatrix();
+    glRotatef(-90,1.0,0.0,0.0);
+    gluCylinder(peDireito, 0.05f, 0.03f, 0.2f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0,0.0,.2);
+    gluSphere(tampaoDireito, 0.03f, 26, 13);
     glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    
+}
+// Called to draw scene
+void RenderScene(void)
+{
 
-    // foot
-    glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
-    gluSphere(pObj, 0.05f, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
-    gluCylinder(pObj, 0.05f, 0.03f, 0.2f, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28 + 0.2);
-    gluSphere(pObj, 0.03f, 26, 13);
-    glPopMatrix();
+    GLUquadricObj *pObj; // Quadric Object
 
+    // Clear the window with current clearing color
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Save the matrix state and do the rotations
     glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
-    gluSphere(pObj, 0.05f, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28);
-    gluCylinder(pObj, 0.05f, 0.03f, 0.2f, 26, 13);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-0.15f, 0.6 - sin(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - sin(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28, -cos(PI / 2 - rotacaoPerna * PI / 180) * 0.28 - cos(PI / 2 - (rotacaoPerna + rotacaoJoelho) * PI / 180) * 0.28 + 0.2);
-    gluSphere(pObj, 0.03f, 26, 13);
-    glPopMatrix();
+
+    // Move object back and do in place rotation
+    glTranslatef(0.0, -1.0, zoom);
+    glRotatef(yRot, 0.0, 1.0, 0.0);
+    glRotatef(xRot, 1.0, 0.0, 0.0);
+    glRotatef(zRot, 0.0, 0.0, 1.0);
+
+    // Draw something
+    pObj = gluNewQuadric();
+    gluQuadricNormals(pObj, GLU_SMOOTH);
+
+    DrawHead();
+    DrawBody();
+    DrawArms();
+    DrawLegs();
 
     // Restore the matrix state
     glPopMatrix();

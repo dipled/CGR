@@ -1,4 +1,4 @@
-// gcc bonecoDeNeve.c -lglut -lGL -lGLU -lm -o bonecoDeNeve && ./bonecoDeNeve
+// gcc robo.c -lglut -lGL -lGLU -lm -o robo && ./robo
 #include <GL/glut.h>
 
 // Rotation
