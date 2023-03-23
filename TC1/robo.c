@@ -294,6 +294,7 @@ void DrawLegs()
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
+    
     coxaDireita = gluNewQuadric();
     cusetDireito = gluNewQuadric();
     pernaDireita = gluNewQuadric();
