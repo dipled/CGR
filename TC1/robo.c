@@ -227,7 +227,7 @@ void DrawArms()
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
-    ombroDireito = gluNewQuadric();
+	ombroDireito = gluNewQuadric();
     bracoDireito = gluNewQuadric();
     cotoveloDireito = gluNewQuadric();
     anteDireito = gluNewQuadric();
