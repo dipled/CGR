@@ -14,20 +14,20 @@ static GLfloat zoom = -5.0;
 
 void iniciaParticulas(int part)
 {
-	fogo[part].tempoVida = (double)(8 + rand() % 4) / 11;
+	fogo[part].tempoVida = (double)(9 + rand() % 4) / 11;
 	fogo[part].gravidade = 0.5;
-	fogo[part].pos_x = (double)((rand() % 100) - 50) / 300;
-	fogo[part].pos_z = (double)((rand()%100-60))/300;
+	fogo[part].pos_x = (double)((rand() % 120) - 60) / 300;
+	fogo[part].pos_z = (double)((rand() % 120) - 70) / 300;
 	fogo[part].pos_y = .8;
 	fogo[part].velocidade = 3.15;
-	fogo[part].vivo = false;
+	fogo[part].vivo = FALSE;
 	// define o tamanho
-	fogo[part].raio = (double)(15 + rand() % 10) / 1500;
+	fogo[part].raio = (double)(15 + rand() % 10) / 2000;
 }
 
 void fogar()
 {
-	int subida = true;
+	int subida = TRUE;
 	for (int i = 0; i < NUM; i++)
 	{
 		glColor3f(1.0, 0.45, 0);
@@ -49,7 +49,7 @@ void fogar()
 			fogo[i].pos_y += fogo[i].velocidade / 1000;
 			fogo[i].velocidade += fogo[i].gravidade / 5;
 			fogo[i].tempoVida -= 0.008;
-			if (fogo[i].pos_y > 0.3 && fogo[i].pos_y < 1 && subida == true)
+			if (fogo[i].pos_y > 0.3 && fogo[i].pos_y < 1 && subida == TRUE)
 			{
 				if (fogo[i].pos_x > -0.1)
 				{
@@ -83,7 +83,7 @@ void fogar()
 		{
 			if (rand() % 100 < 2)
 			{
-				fogo[i].vivo = true;
+				fogo[i].vivo = TRUE;
 			}
 		}
 
@@ -255,7 +255,7 @@ void RenderScene(void)
 	glPushMatrix();
 	glTranslatef(0.0, .8, -0.05);
 	glRotatef(-90.0, 1.0, 0.0, 0.0);
-	gluDisk(pObj,0,0.2,26,13);
+	gluDisk(pObj, 0, 0.2, 26, 13);
 	glPopMatrix();
 	glColor3f(0.6, 0.6, 0.6);
 	glPushMatrix();
@@ -570,7 +570,7 @@ int main(int argc, char *argv[])
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(900, 680);
-	glutCreateWindow("Velinha >.<");
+	glutCreateWindow("CasteloSauron");
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(RenderScene);
@@ -586,7 +586,7 @@ int main(int argc, char *argv[])
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glutReshapeFunc(ChangeSize);
-    glutKeyboardFunc(NormalKeys);
+	glutKeyboardFunc(NormalKeys);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	SetupRC();

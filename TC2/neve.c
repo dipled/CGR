@@ -108,14 +108,14 @@ void iniciaFlocos(int part)
 	neve[part].pos_z = (double)((rand() % 200) - 100) / 10;
 	neve[part].pos_y = 4.5;
 	neve[part].velocidade = 3.14;
-	neve[part].vivo = false;
+	neve[part].vivo = FALSE;
 	// define o tamanho
 	neve[part].raio = (double)(13 + rand() % 10) / 1000;
 }
 
 void nevar()
 {
-	int queda = true;
+	int queda = TRUE;
 	for (int i = 0; i < NUM; i++)
 	{
 		glColor3f(0.9, 0.9, 0.9);
@@ -146,7 +146,7 @@ void nevar()
 		{
 			if (rand() % 100 < 2)
 			{
-				neve[i].vivo = true;
+				neve[i].vivo = TRUE;
 			}
 		}
 
