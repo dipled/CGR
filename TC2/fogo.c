@@ -1,9 +1,9 @@
 // sudo apt-get install freeglut3-dev g++ fogo.cpp -lGLU -lGL -lglut -o fogo && ./fogo
 
 #include "particulas.h"
-
+#include <math.h>
 // float angulo = 0.0;
-#define NUM 4000
+#define NUM 5000
 
 Particula fogo[NUM];
 
@@ -16,8 +16,8 @@ void iniciaParticulas(int part)
 {
 	fogo[part].tempoVida = (double)(9 + rand() % 4) / 11;
 	fogo[part].gravidade = 0.5;
-	fogo[part].pos_x = (double)((rand() % 120) - 60) / 300;
-	fogo[part].pos_z = (double)((rand() % 120) - 70) / 300;
+	fogo[part].pos_x = (double)((rand() % 150) - 75) / 300;
+	fogo[part].pos_z = (double)((rand() % 150) - 75) / 300-1;
 	fogo[part].pos_y = .8;
 	fogo[part].velocidade = 3.15;
 	fogo[part].vivo = FALSE;
@@ -51,7 +51,7 @@ void fogar()
 			fogo[i].tempoVida -= 0.008;
 			if (fogo[i].pos_y > 0.3 && fogo[i].pos_y < 1 && subida == TRUE)
 			{
-				if (fogo[i].pos_x > -0.1)
+				if (fogo[i].pos_x >= -0.1)
 				{
 					fogo[i].pos_x += -3 * fogo[i].velocidade / subidax;
 				}
@@ -61,18 +61,18 @@ void fogar()
 				}
 				subida = !(subida);
 			}
-			else if (fogo[i].pos_x > -0.1 && fogo[i].pos_x < 0.0)
+			else if (fogo[i].pos_x >= -0.1 && fogo[i].pos_x <= 0.0)
 			{
 				fogo[i].pos_x = fogo[i].pos_x;
 			}
 
 			else
 			{
-				if (fogo[i].pos_x > 0.0)
+				if (fogo[i].pos_x >=0.0)
 				{
 					fogo[i].pos_x += fogo[i].velocidade / subidax;
 				}
-				else if (fogo[i].pos_x < 0.0)
+				else if (fogo[i].pos_x <= 0.0)
 				{
 					fogo[i].pos_x += -fogo[i].velocidade / subidax;
 				}
@@ -248,14 +248,9 @@ void RenderScene(void)
 	// Torres
 	glColor3f(0.2, 0.2, 0.2);
 	glPushMatrix();
-	glTranslatef(0.0, 0.8, -0.05);
-	glRotatef(90.0, 5.0, 0.0, 0.0);
-	gluCylinder(pObj, 0.2, 0.2, 0.8, 26, 13);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, .8, -0.05);
-	glRotatef(-90.0, 1.0, 0.0, 0.0);
-	gluDisk(pObj, 0, 0.2, 26, 13);
+	glScalef(1,1.5,1);
+	glTranslatef(.0,.3,-1);
+	glutSolidCube(.6);
 	glPopMatrix();
 	glColor3f(0.6, 0.6, 0.6);
 	glPushMatrix();
