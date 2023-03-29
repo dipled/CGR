@@ -17,7 +17,6 @@ double rad(GLfloat theta);
 // Variáveis que iremos utilizar para rotação:
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
-static GLfloat zRot = 0.0f;
 
 typedef struct Particle{
     GLfloat x, y, v_x, v_y;
@@ -145,7 +144,6 @@ GLfloat theta = 0;
 void RenderScene(void)
 {
     srand(time(NULL));
-    GLUquadricObj *Ball;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 

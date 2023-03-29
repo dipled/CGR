@@ -16,3 +16,8 @@ fogo: fogoC
 
 fogoC:
 	${CC} ${FLAGS} fogo.c
+particleC:
+	${CC} ${FLAGS} particle.c
+
+particle: particleC
+	${CC} particle.o ${LIBS} -o particle.out
