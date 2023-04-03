@@ -17,6 +17,7 @@ double rad(GLfloat theta);
 // Variáveis que iremos utilizar para rotação:
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
+static GLfloat zRot = 0.0f;
 
 typedef struct Particle{
     GLfloat x, y, v_x, v_y;
@@ -69,6 +70,7 @@ void ChangeSize(int w, int h)
     // (7) Função já descrita antes:
     glLoadIdentity();
 }
+
 void SpecialKeys(int key, int x, int y)
 {
     // (1) O seguinte corpo da função é auto-explicativo:
@@ -122,8 +124,8 @@ void generateParticle(){
     srand(time(NULL));
     first_point.x = 4*cos(rand()) * pow(-1, rand()%100);
     first_point.y = 4*cos(rand()) * pow(-1, rand()%100);
-    first_point.v_x = 1 * pow(-1, rand()%1000000);
-    first_point.v_y = 1 * pow(-1, rand()%10000000);
+    first_point.v_x = 1 * pow(-1, rand()%100);
+    first_point.v_y = 1 * pow(-1, rand()%100);
     
     for(int i = 0; i < NUM_OF_PARTICLES; i++){
         followers[i].x = 1*cos(rand()) * pow(-1, rand()%100);
@@ -143,6 +145,7 @@ GLfloat theta = 0;
 void RenderScene(void)
 {
     srand(time(NULL));
+    GLUquadricObj *Ball;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
@@ -174,42 +177,33 @@ void RenderScene(void)
     first_point.y = first_point.y + 0.1*first_point.v_y; 
 
     if(first_point.x > 5 || first_point.x < -5){
-        first_point.v_x = - (first_point.v_x + abs((rand()%200)/2000));
+        first_point.v_x = - (first_point.v_x + abs((rand()%20)/20));
         // first_point.v_y = - first_point.v_y;
     }
     
     if(first_point.y > 4 || first_point.y < -4){
         // first_point.v_x = - first_point.v_x;
-        first_point.v_y = - (first_point.v_y + abs((rand()%200)/2000));
+        first_point.v_y = - (first_point.v_y + abs((rand()%20)/20));
     }
 
     for(int i = 0; i < NUM_OF_PARTICLES; i++){
-        if((followers[i].x > 4 || followers[i].x < -4) || (followers[i].y > 3 || followers[i].y < -3)){
-            if(followers[i].x > 3 || followers[i].x < -3){
-            followers[i].v_x = -(followers[i].v_x + abs((rand()%20)/20));
+        if((followers[i].x > 6 || followers[i].x < -6) || (followers[i].y > 4 || followers[i].y < -4)){
+            if(followers[i].x > 5 || followers[i].x < -5){
+            followers[i].v_x = - (followers[i].v_x + abs((rand()%20)/20));
             // first_point.v_y = - first_point.v_y;
             }
             
-            if(followers[i].y > 2 || followers[i].y < -2){
+            if(followers[i].y > 4 || followers[i].y < -4){
                 // first_point.v_x = - first_point.v_x;
-                followers[i].v_y =  -(followers[i].v_y + abs((rand()%20)/20));
+                followers[i].v_y = - (followers[i].v_y + abs((rand()%20)/20));
             }
         }
-<<<<<<< HEAD:Trabalho02/particle.c
         else if(dist(first_point, followers[i]) <= 2){
             // vetor de velocidade unitário:
             velocity_module = sqrt(powf((first_point.x - followers[i].x), 2) + powf((first_point.y - followers[i].y), 2));
             velocity_random_x = 0.01;
             velocity_random_y = 0.01;
             followers[i].v_x = -velocity_random_x*(first_point.x - followers[i].x)/velocity_module;
-=======
-        else if(dist(first_point, followers[i]) <= 1){
-            // vetor de velocidade unitário:
-            velocity_module = sqrt(powf((first_point.x - followers[i].x), 2) + powf((first_point.y - followers[i].y), 2));
-            velocity_random_x = -0.09;
-            velocity_random_y = -0.09;
-            followers[i].v_x = velocity_random_x*(first_point.x - followers[i].x)/velocity_module;
->>>>>>> 464a7d8f6050a8c79a31ef1b70ebe7936997099f:TC2/particle.c
             followers[i].v_y = velocity_random_y*(first_point.y - followers[i].y)/velocity_module;
 
         }
