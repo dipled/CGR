@@ -195,21 +195,13 @@ void RenderScene(void)
                 followers[i].v_y =  -(followers[i].v_y + abs((rand()%20)/20));
             }
         }
-<<<<<<< HEAD:Trabalho02/particle.c
-        else if(dist(first_point, followers[i]) <= 2){
-            // vetor de velocidade unitário:
-            velocity_module = sqrt(powf((first_point.x - followers[i].x), 2) + powf((first_point.y - followers[i].y), 2));
-            velocity_random_x = 0.01;
-            velocity_random_y = 0.01;
-            followers[i].v_x = -velocity_random_x*(first_point.x - followers[i].x)/velocity_module;
-=======
         else if(dist(first_point, followers[i]) <= 1){
             // vetor de velocidade unitário:
             velocity_module = sqrt(powf((first_point.x - followers[i].x), 2) + powf((first_point.y - followers[i].y), 2));
             velocity_random_x = -0.09;
             velocity_random_y = -0.09;
             followers[i].v_x = velocity_random_x*(first_point.x - followers[i].x)/velocity_module;
->>>>>>> 464a7d8f6050a8c79a31ef1b70ebe7936997099f:TC2/particle.c
+
             followers[i].v_y = velocity_random_y*(first_point.y - followers[i].y)/velocity_module;
 
         }
