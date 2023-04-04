@@ -16,6 +16,11 @@ fogo: fogoC
 
 fogoC:
 	${CC} ${FLAGS} fogo.c
+lavaC:
+	${CC} ${FLAGS} lava.c
+
+lava: lavaC
+	${CC} lava.o ${LIBS} -o lava.out
 particleC:
 	${CC} ${FLAGS} particle.c
 
