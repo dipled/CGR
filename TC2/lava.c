@@ -21,7 +21,6 @@ double rad(GLfloat theta){
 // Variáveis que iremos utilizar para rotação:
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
-static GLfloat zRot = 0.0f;
 
 typedef struct Particle{
     GLfloat x, y, z, v_x, v_y, v_z;
@@ -215,10 +214,7 @@ void regenerateSmoke(int i){
 
 void moveSmoke(){
     // Mover e desenhar as particulas:
-    GLfloat slower = -1.4;
-    // GLfloat gravity = -0.001; /*Escala menor*/ 
-    GLfloat ground = -0.5;
-    
+    // GLfloat gravity = -0.001; /*Escala menor*/     
     // glColor3f(1, 1, 1);
     glPointSize(2.0);
     glBegin(GL_POINTS);
