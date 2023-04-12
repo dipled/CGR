@@ -23,3 +23,9 @@ robo: roboC
 
 roboC:
 	${CC} ${FLAGS} robo.c 
+
+teste: testeC
+	${CC} teste.o ${LIBS} -o teste.out
+
+testeC:
+	${CC} ${FLAGS} teste.c 

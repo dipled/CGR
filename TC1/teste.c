@@ -1,613 +1,408 @@
 #include <GL/glut.h>
-#include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#define PI 3.14159265358979323846
+static double rotacaoBraco = 0;
+static double rotacaoCotovelo = 0;
+static double rotacaoCoxaDir = 0;
+static double rotacaoPernaDir = 0;
+static double rotacaoCoxaEsq = 0;
+static double rotacaoPernaEsq = 0;
 
-int rotacaoBraco = 0;
-int rotacaoCotovelo = 0;
-int rotacaoPerna = 0;
-int rotacaoJoelho = 0;
+// Rotation
+static GLfloat yRot = 0.0f;
+static GLfloat xRot = 0.0f;
+static GLfloat zRot = 0.0f;
+static GLfloat zoom = -5.0;
+// Change viewing volume and viewport.  Called when window is resized
+void ChangeSize(int w, int h)
+{
+    GLfloat fAspect;
 
-static GLfloat ROTACAO_X = 0.0f;
-static GLfloat ROTACAO_Y = 0.0f;
-static GLfloat ROTACAO_Z = 0.0f;
-static GLfloat tamanhoCorpoX = 0.75f;
-static GLfloat tamanhoCorpoY = 1.5f;
+    // Prevent a divide by zero
+    if (h == 0)
+        h = 1;
 
-void ChangeSize(int comprimento, int altura){  
-    GLfloat fAspect;  
-  
-    // Prevent a divide by zero  
-    if(altura == 0)  
-        altura = 1;  
-  
-    // Set Viewport to window dimensions  
-    glViewport(0, 0, comprimento, altura);  
-  
-    fAspect = (GLfloat)comprimento/(GLfloat)altura;  
-  
-    // Reset coordinate system  
-    glMatrixMode(GL_PROJECTION);  
-    glLoadIdentity();  
-  
-    // Produce the perspective projection  
-    gluPerspective(35.0f, fAspect, 1.0, 40.0);  
-  
+    // Set Viewport to window dimensions
+    glViewport(0, 0, w, h);
+
+    fAspect = (GLfloat)w / (GLfloat)h;
+
+    // Reset coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    // Produce the perspective projection
+    gluPerspective(35.0, fAspect, 1.0, 40.0);
     glMatrixMode(GL_MODELVIEW);
-    // Applies subsequent matrix operations to the modelview matrix stack. 
-    glLoadIdentity();  
-}  
-
-
-void giraBraco(void){
-    glRotatef((GLfloat) rotacaoBraco, 1, 0, 0); 
+    glLoadIdentity();
 }
 
-void giraCotovelo(void){
-    glRotatef((GLfloat) rotacaoCotovelo, 1, 0, 0); 
+// This function does any needed initialization on the rendering context.  Here it sets up and initializes the lighting for the scene.
+void SetupRC()
+{
+
+    // Light values and coordinates
+    GLfloat whiteLight[] = {0.05, 0.05, 0.05, 1.0f};
+    GLfloat sourceLight[] = {0.25, 0.25, 0.25, 0.25f};
+    GLfloat lightPos[] = {-1.0, 5.0, 5.0, 1.0f};
+
+    glEnable(GL_DEPTH_TEST); // Hidden surface removal
+    glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
+    glEnable(GL_CULL_FACE);  // Do not calculate inside
+
+    // Enable lighting
+    glEnable(GL_LIGHTING);
+
+    // Setup and enable light 0
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, whiteLight);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, sourceLight);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, sourceLight);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glEnable(GL_LIGHT0);
+
+    // Enable color tracking
+    glEnable(GL_COLOR_MATERIAL);
+
+    // Set Material properties to follow glColor values
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+    // Black blue background
+    glClearColor(0.7, 0.8, 1.0, 0.0);
 }
 
-void giraPerna(void){
-    glRotatef((GLfloat) rotacaoPerna, 1,0,0); 
+void NormalKeys(unsigned char key, int x, int y)
+{
+    switch (key)
+
+    {
+    case 'z':
+        zoom += .3;
+        break;
+    case 'x':
+        zoom -= .3;
+        break;
+    case 'w':
+        xRot -= 5.0f;
+        break;
+    case 's':
+        xRot += 5.0f;
+        break;
+    case 'a':
+        yRot -= 5.0f;
+        break;
+    case 'd':
+        yRot += 5.0f;
+        break;
+    case 'q':
+        zRot += 5.0f;
+        break;
+    case 'e':
+        zRot -= 5.0f;
+        break;
+    case 'r':
+        rotacaoBraco = ((int)rotacaoBraco + 5) % 360;
+        glutPostRedisplay();
+        break;
+    case 't':
+        rotacaoBraco = ((int)rotacaoBraco - 5) % 360;
+        glutPostRedisplay();
+        break;
+    case 'f':
+        rotacaoCotovelo = ((int)rotacaoCotovelo + 5) % 360;
+        glutPostRedisplay();
+        break;
+    case 'g':
+        rotacaoCotovelo = ((int)rotacaoCotovelo - 5) % 360;
+        glutPostRedisplay();
+        break;
+    }
+    yRot = (GLfloat)((const int)yRot % 360);
+    xRot = (GLfloat)((const int)xRot % 360);
+    zRot = (GLfloat)((const int)zRot % 360);
+    glutPostRedisplay();
+    // Nao quebra o aspect ratio nem nada :)
+    ChangeSize(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
-
-void giraJoelho(void){
-    glRotatef((GLfloat) rotacaoJoelho, 1,0,0); 
-}
-
-void SetupRC(){  
-
-    // Light values and coordinates  
-    GLfloat  whiteLight[] = { 0.05f, 0.05f, 0.05f, 1.0f };  
-    GLfloat  sourceLight[] = { 0.25f, 0.25f, 0.25f, 1.0f };  
-    GLfloat  lightPos[] = { -10.f, 5.0f, 5.0f, 1.0f };  
-  
-    glEnable(GL_DEPTH_TEST);    // Hidden surface removal  
-    glFrontFace(GL_CCW);        // Counter clock-wise polygons face out  
-    glEnable(GL_CULL_FACE);     // Do not calculate inside  
-  
-    // Enable lighting  
-    glEnable(GL_LIGHTING);  
-  
-    // Setup and enable light 0  
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,whiteLight);  
-    glLightfv(GL_LIGHT0,GL_AMBIENT,sourceLight);  
-    glLightfv(GL_LIGHT0,GL_DIFFUSE,sourceLight);  
-    glLightfv(GL_LIGHT0,GL_POSITION,lightPos);  
-    glEnable(GL_LIGHT0);  
-  
-    // Enable color tracking  
-    glEnable(GL_COLOR_MATERIAL);  
-      
-    // Set Material properties to follow glColor values  
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  
-  
-    // Black blue background  
-    glClearColor(0.25f, 0.25f, 0.50f, 1.0f);  
-
-}
-
-void DesenhaCorpo(void){
-
-    // GLfloat posicaoCorpoX, posicaoCorpoY, posicaoCorpoZ;
-    GLfloat tamanhoCorpoX, tamanhoCorpoY; 
-
-    tamanhoCorpoX = 0.75f;
-    tamanhoCorpoY = 1.5f;
-
+void DrawHead()
+{
+    GLUquadricObj *pObj;
+    pObj = gluNewQuadric();
+    glColor3f(0.7f, 0.7f, 0.7f);
+    glPushMatrix(); // save transform matrix state
+    glTranslatef(0.0f, 1.45f, 0.0f);
+    glScalef(.8, 1.05, 1);
+    glutSolidCube(0.4);
+    glPopMatrix(); // restore transform matrix state
     glPushMatrix();
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Frontal
+    glTranslatef(0.0f, 1.77, 0.0f);
+    glRotatef(90.0f, 1.0f, .0f, 0.0f);
+    gluCylinder(pObj, 0.02f, 0.02f, 0.15f, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glPushMatrix();
+    glTranslatef(0.0f, 1.77f, 0.0f);
+    gluSphere(pObj, 0.05f, 26, 13);
     glPopMatrix();
 
+    // eyes
+    glColor3f(.0f, 1.0f, .3f);
     glPushMatrix();
-        glTranslatef(tamanhoCorpoX,0.0f,tamanhoCorpoX);
-        glRotatef(180,0.0f,1.0f,0.0f);
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Fundo Frontal
+    glTranslatef(-0.08f, 1.56f, 0.22f);
+    gluSphere(pObj, 0.045f, 26, 13);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0.08f, 1.56f, 0.22f);
+    gluSphere(pObj, 0.045f, 26, 13);
     glPopMatrix();
 
+    // mouth
+    glColor3f(.0f, 0.0f, 0.0f);
     glPushMatrix();
-        glTranslatef(0.0f,0.0f,tamanhoCorpoX);
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Traseiro
+    glTranslatef(0.0, 1.45, 0.2f);
+    glScalef(0.4f, 0.08f, 0.02f);
+    glutSolidCube(0.5);
     glPopMatrix();
-
+    glColor3f(1.0f, 0.0f, 0.0f);
     glPushMatrix();
-        glTranslatef(tamanhoCorpoX,0.0f,0.0f);
-        glRotatef(180,0.0f,1.0f,0.0f);
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Fundo Traseiro
+    glTranslatef(0.05, 1.41, 0.2f);
+    glScalef(0.2f, 0.08f, 0.02f);
+    glutSolidCube(0.5);
     glPopMatrix();
-
+    glColor3f(.0f, 0.0f, 0.0f);
     glPushMatrix();
-        // glTranslatef(0.0f,0.0f,1.0f);
-        glRotatef(-90,0.0f,1.0f,0.0f);
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Parede Esquerda
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(0.0f,0.0f,tamanhoCorpoX);
-        glRotatef(-270,0.0f,1.0f,0.0f);
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Fundo Parede Esquerda
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(tamanhoCorpoX,0.0f,tamanhoCorpoX);
-        glRotatef(90,0.0f,1.0f,0.0f);
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Parede Direita
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(tamanhoCorpoX,0.0f,0.0f);
-        glRotatef(-90,0.0f,1.0f,0.0f);
-        glRectf(0.0f,0.0f,tamanhoCorpoX,tamanhoCorpoY); // Retângulo Fundo Parede Direita
-    glPopMatrix();
-
-    glPushMatrix();
-        // glColor3f(1.0f,0.0f,0.0f);
-        glTranslatef(0.0f,-tamanhoCorpoX,0.0f);
-        glRotatef(90,1.0f,0.0f,0.0f);
-        glTranslatef(0,tamanhoCorpoX-(2*tamanhoCorpoY),-(tamanhoCorpoX+tamanhoCorpoY));
-        glRectf(0.0f,2*tamanhoCorpoY,tamanhoCorpoX,tamanhoCorpoX+tamanhoCorpoY); // Retangulo Tampa Superior
-    glPopMatrix();
-
-    glPushMatrix();
-        // glColor3f(0.0f,1.0f,0.0f);
-        glTranslatef(0.0f,-tamanhoCorpoX,0.0f);
-        glRotatef(-90,1.0f,0.0f,0.0f);
-        glTranslatef(0,-2*tamanhoCorpoY,tamanhoCorpoX);
-        glRectf(0,2*tamanhoCorpoY,tamanhoCorpoX,tamanhoCorpoX+tamanhoCorpoY); // Retangulo Tampa Inferior
+    glTranslatef(-.02, 1.41, 0.2f);
+    glScalef(0.08f, 0.08f, 0.02f);
+    glutSolidCube(0.5);
     glPopMatrix();
 }
-
-void DesenhaCabeca(void){
-    GLfloat tamanhoCabeca; 
-
-    tamanhoCabeca = 0.4f;
-
+void DrawBody()
+{
+    glColor3f(0.7f, 0.7f, 0.7f);
     glPushMatrix();
-        glTranslatef(-0.125f, tamanhoCorpoY+.125, -0.625f);
-        // glColor3f(1.0f, 0.0f, 1.0f);
-        glutSolidCube(tamanhoCabeca);
+    glTranslatef(0.0, 0.9645, 0.0f);
+    glScalef(0.8f, 1.2f, 0.8f);
+    glutSolidCube(0.5);
     glPopMatrix();
-
+}
+void DrawArms()
+{
+    GLUquadricObj *ombroDireito, *ombroEsquerdo, *bracoDireito, *bracoEsquerdo, *cotoveloDireito, *cotoveloEsquerdo, *anteEsquerdo, *anteDireito, *maoEsquerda, *maoDireita;
+    ombroEsquerdo = gluNewQuadric();
+    bracoEsquerdo = gluNewQuadric();
+    cotoveloEsquerdo = gluNewQuadric();
+    anteEsquerdo = gluNewQuadric();
+    maoEsquerda = gluNewQuadric();
     glPushMatrix();
-        glTranslatef(-.25f, tamanhoCorpoY+.175f, -.45);
-        glColor3f(1,0,0);
-        glutSolidCube(tamanhoCabeca/5);
+    glTranslatef(0.22f, 1.22f, 0.0f);
+    gluSphere(ombroEsquerdo, 0.08f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0, 0.0f);
+    glRotatef(90 + rotacaoBraco, 1.0f, 0.0f, 0.0f);
+    gluCylinder(bracoEsquerdo, 0.05f, 0.05f, 0.2f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, .0, 0.2);
+    gluSphere(cotoveloEsquerdo, 0.08f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0, 0, 0);
+    glRotatef(rotacaoCotovelo - 90, 1, 0, 0);
+    gluCylinder(anteEsquerdo, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, .0, 0.28);
+    gluSphere(maoEsquerda, 0.08f, 26, 13);
     glPopMatrix();
-
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    ombroDireito = gluNewQuadric();
+    bracoDireito = gluNewQuadric();
+    cotoveloDireito = gluNewQuadric();
+    anteDireito = gluNewQuadric();
+    maoDireita = gluNewQuadric();
     glPushMatrix();
-        glTranslatef(0, tamanhoCorpoY+.175f, -.45);
-        glColor3f(1,0,0);
-        glutSolidCube(tamanhoCabeca/5);
+    glTranslatef(-0.22f, 1.22f, 0.0f);
+    gluSphere(ombroDireito, 0.08f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0, 0.0f);
+    glRotatef(90 + rotacaoBraco, 1.0f, 0.0f, 0.0f);
+    gluCylinder(bracoDireito, 0.05f, 0.05f, 0.2f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, .0, 0.2);
+    gluSphere(cotoveloDireito, 0.08f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0, 0, 0);
+    glRotatef(rotacaoCotovelo - 90, 1, 0, 0);
+    gluCylinder(anteDireito, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, .0, 0.28);
+    gluSphere(maoDireita, 0.08f, 26, 13);
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
     glPopMatrix();
 }
 
-void DesenhaBracoEsquerdo(void){
-    GLfloat raioBraco, comprimentoBraco, tamanhoOmbro, tamanhoCotovelo, raioAnteBraco, comprimentoAnteBraco; 
-    GLUquadricObj *Ombro, *Braco, *Cotovelo, *AnteBraco, *Mao;
-
-    Ombro = gluNewQuadric();
-    Braco = gluNewQuadric();
-    AnteBraco = gluNewQuadric();
-    Cotovelo = gluNewQuadric();
-    Mao = gluNewQuadric();
-	gluQuadricNormals(Ombro, GLU_SMOOTH);  
-    gluQuadricNormals(Braco, GLU_SMOOTH);  
-    gluQuadricNormals(Cotovelo, GLU_SMOOTH); 
-    gluQuadricNormals(AnteBraco, GLU_SMOOTH);
-    gluQuadricNormals(Mao, GLU_SMOOTH);
-
-    raioBraco = 0.10f;
-    comprimentoBraco = 0.6f;
-    tamanhoOmbro = 0.15f;
-    tamanhoCotovelo = 0.125f;
-    raioAnteBraco = raioBraco;
-    comprimentoAnteBraco = (2*comprimentoBraco)/3;
-
+void DrawLegs()
+{
+    GLUquadricObj *coxaEsquerda, *coxaDireita, *cusetEsquerdo, *cusetDireito, *pernaEsquerda, *pernaDireita, *calcanharDireito, *calcanharEsquerdo, *joelhoEsquerdo, *joelhoDireito, *peDireito, *peEsquerdo;
+    GLUquadricObj *tampaoDireito, *tampaoEsquerdo;
+    coxaEsquerda = gluNewQuadric();
+    cusetEsquerdo = gluNewQuadric();
+    pernaEsquerda = gluNewQuadric();
+    calcanharEsquerdo = gluNewQuadric();
+    joelhoEsquerdo = gluNewQuadric();
+    peEsquerdo = gluNewQuadric();
+    tampaoEsquerdo = gluNewQuadric();
     glPushMatrix();
-        glTranslatef(-tamanhoCorpoX+.25,tamanhoCorpoY-.25,-0.55);
-        gluSphere(Ombro, tamanhoOmbro, 30, 15);
+    glTranslatef(0.15f, 0.63f, 0.0f);
+    gluSphere(cusetEsquerdo, 0.08f, 26, 13);
+    glPushMatrix();
+    glRotatef(90.0 + rotacaoCoxaEsq, 1.0f, 0.0f, 0.0f);
+    gluCylinder(coxaEsquerda, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, 0.28);
+    gluSphere(joelhoEsquerdo, 0.08f, 26, 13);
+    glPushMatrix();
+    glRotatef(rotacaoPernaEsq, 1.0f, 0.0f, 0.0f);
+    gluCylinder(pernaEsquerda, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, 0.28);
+    gluSphere(calcanharEsquerdo, 0.05f, 26, 13);
+    glPushMatrix();
+    glRotatef(-90, 1.0, 0.0, 0.0);
+    gluCylinder(peEsquerdo, 0.05f, 0.03f, 0.2f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, .2);
+    gluSphere(tampaoEsquerdo, 0.03f, 26, 13);
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
     glPopMatrix();
 
+    coxaDireita = gluNewQuadric();
+    cusetDireito = gluNewQuadric();
+    pernaDireita = gluNewQuadric();
+    calcanharDireito = gluNewQuadric();
+    joelhoDireito = gluNewQuadric();
+    peDireito = gluNewQuadric();
+    tampaoDireito = gluNewQuadric();
     glPushMatrix();
-        glTranslatef(-tamanhoCorpoX+.18,tamanhoCorpoY-.25,-0.55);
-        giraBraco();
-        glRotatef(45, 0, 0, 1);
-        glRotatef(-45, -1, 1, 0);
-        gluCylinder(Braco, raioBraco, raioBraco, comprimentoBraco, 4, 2);
+    glTranslatef(-0.15f, 0.63f, 0.0f);
+    gluSphere(cusetDireito, 0.08f, 26, 13);
+    glPushMatrix();
+    glRotatef(90.0 + rotacaoCoxaDir, 1.0f, 0.0f, 0.0f);
+    gluCylinder(coxaDireita, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, 0.28);
+    gluSphere(joelhoDireito, 0.08f, 26, 13);
+    glPushMatrix();
+    glRotatef(rotacaoPernaDir, 1.0f, 0.0f, 0.0f);
+    gluCylinder(pernaDireita, 0.05f, 0.05f, 0.28f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, 0.28);
+    gluSphere(calcanharDireito, 0.05f, 26, 13);
+    glPushMatrix();
+    glRotatef(-90, 1.0, 0.0, 0.0);
+    gluCylinder(peDireito, 0.05f, 0.03f, 0.2f, 26, 13);
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, .2);
+    gluSphere(tampaoDireito, 0.03f, 26, 13);
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+}
 
-        glPushMatrix();
-            glTranslatef(-tamanhoCorpoX+.75,tamanhoCorpoY-1.5,.53);
-            gluSphere(Cotovelo, tamanhoCotovelo, 30, 15);
-        glPopMatrix();
+// Called to draw scene
+void RenderScene(void)
+{
 
-        glPushMatrix();
-            glTranslatef(-tamanhoCorpoX+.75,tamanhoCorpoY-1.5,.53);
-            glRotatef(-45, 0, 0, 1);
-            giraCotovelo();
-            glRotatef(-45, 0, 0, 1);
-            gluCylinder(AnteBraco, raioAnteBraco, raioAnteBraco, comprimentoAnteBraco, 4, 2);
-            
-            glPushMatrix();
-                glTranslatef(-tamanhoCorpoX+.75,tamanhoCorpoY-1.5,.43);
-                gluSphere(Mao, raioAnteBraco, 30, 15);
-            glPopMatrix();
-        glPopMatrix();
+    GLUquadricObj *pObj; // Quadric Object
 
+    // Clear the window with current clearing color
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Save the matrix state and do the rotations
+    glPushMatrix();
+
+    // Move object back and do in place rotation
+    glTranslatef(0.0, -1, -5);
+
+    glRotatef(yRot, 0.0, 1.0, 0.0);
+    glRotatef(xRot, 1.0, 0.0, 0.0);
+    glRotatef(zRot, 0.0, 0.0, 1.0);
+
+    // Draw something
+    pObj = gluNewQuadric();
+    gluQuadricNormals(pObj, GLU_SMOOTH);
+
+    DrawHead();
+    DrawBody();
+    DrawArms();
+    DrawLegs();
+    //  Restore the matrix state
     glPopMatrix();
 
-
+    // Buffer swap
     glutSwapBuffers();
 }
-
-void DesenhaBracoDireito(void){
-    GLfloat raioBraco, comprimentoBraco, tamanhoOmbro, tamanhoCotovelo, raioAnteBraco, comprimentoAnteBraco; 
-    GLUquadricObj *Ombro, *Braco, *Cotovelo, *AnteBraco, *Mao;
-
-    Ombro = gluNewQuadric();
-    Braco = gluNewQuadric();
-    AnteBraco = gluNewQuadric();
-    Cotovelo = gluNewQuadric();
-    Mao = gluNewQuadric();
-	gluQuadricNormals(Ombro, GLU_SMOOTH);  
-    gluQuadricNormals(Braco, GLU_SMOOTH);  
-    gluQuadricNormals(Cotovelo, GLU_SMOOTH); 
-    gluQuadricNormals(AnteBraco, GLU_SMOOTH);
-    gluQuadricNormals(Mao, GLU_SMOOTH);
-
-    raioBraco = 0.10f;
-    comprimentoBraco = 0.6f;
-    tamanhoOmbro = 0.15f;
-    tamanhoCotovelo = 0.125f;
-    raioAnteBraco = raioBraco;
-    comprimentoAnteBraco = (2*comprimentoBraco)/3;
-
-    glPushMatrix();
-        glTranslatef(tamanhoCorpoX-.5,tamanhoCorpoY-.25,-0.55);
-        gluSphere(Ombro, tamanhoOmbro, 30, 15);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(tamanhoCorpoX-.44,tamanhoCorpoY-.25,-0.55);
-        giraBraco();
-        glRotatef(45, 0, 0, 1);
-        glRotatef(-45, -1, 1, 0);
-        gluCylinder(Braco, raioBraco, raioBraco, comprimentoBraco, 4, 2);
-
-        glPushMatrix();
-            glTranslatef(tamanhoCorpoX-.75,tamanhoCorpoY-1.5,0.53);
-            gluSphere(Cotovelo, tamanhoCotovelo, 30, 15);
-        glPopMatrix();
-
-        glPushMatrix();
-            glTranslatef(tamanhoCorpoX-.75,tamanhoCorpoY-1.5,0.53);
-            glRotatef(-45, 0, 0, 1);
-            giraCotovelo();
-            glRotatef(-45, 0, 0, 1);
-            gluCylinder(AnteBraco, raioAnteBraco, raioAnteBraco, comprimentoAnteBraco, 4, 2);
-
-            glPushMatrix();
-                glTranslatef(tamanhoCorpoX-.75,tamanhoCorpoY-1.5,0.43);
-                gluSphere(Mao, raioAnteBraco, 30, 15);
-            glPopMatrix();
-
-        glPopMatrix();
-
-    glPopMatrix();
-
-
-    glutSwapBuffers();
-}
-
-void DesenhaPernaEsquerda(void){
-    GLfloat raioCoxa, comprimentoCoxa, tamanhoQuadril, tamanhoJoelho, raioPerna, comprimentoPerna; 
-    GLUquadricObj *Quadril, *Coxa, *Joelho, *Perna, *Pe;
-
-    GLfloat altura = 0;
-
-    Quadril = gluNewQuadric();
-    Coxa = gluNewQuadric();
-    Perna = gluNewQuadric();
-    Joelho = gluNewQuadric();
-    Pe = gluNewQuadric();
-	gluQuadricNormals(Quadril, GLU_SMOOTH);  
-    gluQuadricNormals(Coxa, GLU_SMOOTH);  
-    gluQuadricNormals(Joelho, GLU_SMOOTH); 
-    gluQuadricNormals(Perna, GLU_SMOOTH);
-    gluQuadricNormals(Pe, GLU_SMOOTH);
-
-    raioCoxa = 0.10f;
-    comprimentoCoxa = 0.4f;
-    tamanhoQuadril = 0.15f;
-    tamanhoJoelho = 0.125f;
-    raioPerna = raioCoxa;
-    comprimentoPerna = (2*comprimentoCoxa)/3;
-
-    glPushMatrix();
-        glTranslatef(-tamanhoCorpoX+.40,altura,-0.4);
-        gluSphere(Quadril, tamanhoQuadril, 30, 15);
-    glPopMatrix();
-
-    altura -= tamanhoQuadril/2;
-    
-    glPushMatrix();
-        glTranslatef(-tamanhoCorpoX+.40,altura,-0.4);
-        giraPerna();
-        glRotatef(90, 1, 0, 0);
-        glRotatef(45, 0, 0, 1);
-        gluCylinder(Coxa, raioCoxa, raioCoxa, comprimentoCoxa, 4, 2);
-
-        glPushMatrix();
-            glTranslatef(-tamanhoCorpoX+.76,altura+.08,0.39);
-            gluSphere(Joelho, tamanhoJoelho, 30, 15);
-        glPopMatrix();
-
-        glPushMatrix();
-            glTranslatef(-tamanhoCorpoX+.76,altura+.08,0.39);
-            glRotatef(-45, 0, 0, 1);
-            giraJoelho();
-            glRotatef(-45, 0, 0, 1);
-            gluCylinder(Perna, raioPerna, raioPerna, comprimentoPerna, 4, 2);
-
-            glPushMatrix();
-                glTranslatef(-tamanhoCorpoX+.75,altura+.07,0.30);
-                gluSphere(Pe, raioPerna, 30, 15);
-            glPopMatrix();
-
-        glPopMatrix();
-
-    glPopMatrix();
-
-
-    // altura -= comprimentoPerna;
-
-
-    glutSwapBuffers();
-}
-
-void DesenhaPernaDireita(void){
-    GLfloat raioCoxa, comprimentoCoxa, tamanhoQuadril, tamanhoJoelho, raioPerna, comprimentoPerna; 
-    GLUquadricObj *Quadril, *Coxa, *Joelho, *Perna, *Pe;
-
-    GLfloat altura = 0;
-
-    Quadril = gluNewQuadric();
-    Coxa = gluNewQuadric();
-    Perna = gluNewQuadric();
-    Joelho = gluNewQuadric();
-    Pe = gluNewQuadric();
-	gluQuadricNormals(Quadril, GLU_SMOOTH);  
-    gluQuadricNormals(Coxa, GLU_SMOOTH);  
-    gluQuadricNormals(Joelho, GLU_SMOOTH); 
-    gluQuadricNormals(Perna, GLU_SMOOTH);
-    gluQuadricNormals(Pe, GLU_SMOOTH);
-
-    raioCoxa = 0.10f;
-    comprimentoCoxa = 0.4f;
-    tamanhoQuadril = 0.15f;
-    tamanhoJoelho = 0.125f;
-    raioPerna = raioCoxa;
-    comprimentoPerna = (2*comprimentoCoxa)/3;
-
-    glPushMatrix();
-        glTranslatef(tamanhoCorpoX-.65,altura,-0.4);
-        gluSphere(Quadril, tamanhoQuadril, 30, 15);
-    glPopMatrix();
-
-    altura -= tamanhoQuadril/2;
-
-    glPushMatrix();
-        glTranslatef(tamanhoCorpoX-.65,altura,-0.4);
-        giraPerna();
-        glRotatef(90, 1, 0, 0);
-        glRotatef(45, 0, 0, 1);
-        gluCylinder(Coxa, raioCoxa, raioCoxa, comprimentoCoxa, 4, 2);
-        
-        glPushMatrix();
-            glTranslatef(-tamanhoCorpoX+.76,altura+.08,.39);
-            gluSphere(Joelho, tamanhoJoelho, 30, 15);
-        glPopMatrix();
-
-        glPushMatrix();
-            glTranslatef(-tamanhoCorpoX+.76,altura+.08,.39);
-            glRotatef(-45, 0, 0, 1);
-            giraJoelho();
-            glRotatef(-45, 0, 0, 1);
-            gluCylinder(Perna, raioPerna, raioPerna, comprimentoPerna, 4, 2);
-
-            glPushMatrix();
-                glTranslatef(-tamanhoCorpoX+.75,altura+.07,.30);
-                gluSphere(Pe, raioPerna, 30, 15);
-            glPopMatrix();
-
-        glPopMatrix();
-
-    glPopMatrix();
-
-    // 
-
-    // altura -= tamanhoJoelho/2;
-
-
-    // altura -= comprimentoPerna;
-
-
-    glutSwapBuffers();
-}
-
-void display(void){
-    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glColor3f (1.0, 1.0, 1.0);
-
-    glPushMatrix(); // 1
-        glTranslatef(0.0f, -0.5f, -5.0f);
-        glRotatef(ROTACAO_X, 1.0f, 0.0f, 0.0f);
-        glRotatef(ROTACAO_Y, 0.0f, 1.0f, 0.0f);
-        glRotatef(ROTACAO_Z, 0.0f, 0.0f, 1.0f);
-
-        glPushMatrix();
-            glTranslatef(-0.5f,0,-1);
-            DesenhaCorpo();
-        glPopMatrix();
-        
-        glColor3f (1.0, 1.0, 1.0);
-
-        glPushMatrix();
-            DesenhaCabeca();
-        glPopMatrix();
-
-        glColor3f (1.0, 1.0, 1.0);
-
-        glPushMatrix();
-            DesenhaBracoEsquerdo();
-        glPopMatrix();
-
-        glColor3f (1.0, 1.0, 1.0);
-
-        glPushMatrix();
-            DesenhaBracoDireito();
-        glPopMatrix();
-
-        glColor3f (1.0, 1.0, 1.0);
-
-        glPushMatrix();
-            DesenhaPernaEsquerda();
-        glPopMatrix();
-
-        glColor3f (1.0, 1.0, 1.0);
-
-        glPushMatrix();
-            DesenhaPernaDireita();
-        glPopMatrix();
-        // Para mover o antebraço junto c/ o braço, basta deixar o braço dentro de um par
-        // [Push/Pop]Matrix interno ao [Push/Pop]Matrix do braço
-        // i.e:
-        // glPushMatrix();
-        //  *código do braço*
-        //   glPushMatrix();
-        //      *códígo do antebraço*
-        //   glPopMatrix();
-        // glPopMatrix();
-
-        //     glTranslatef (-1.0, 0.0, 0.0);
-        //     glRotatef ((GLfloat) shoulder, 0.0, 0.0, 1.0);
-        //     glTranslatef (1.0, 0.0, 0.0);
-        //     glBegin(GL_QUADS);
-        //         glVertex2f(1.0, 0.1);
-        //         glVertex2f(1.0, -0.1);
-        //         glVertex2f(-1.0, -0.1);
-        //         glVertex2f(-1.0, 0.1);
-        //     glEnd();
-
-        // glPushMatrix(); // 2
-        //     glTranslatef (1.0, 0.0, 0.0);
-        //     glRotatef ((GLfloat) elbow, 0.0, 0.0, 1.0);
-        //     glTranslatef (1.0, 0.0, 0.0);
-        //     glBegin(GL_QUADS);
-        //         glVertex2f(1.0, 0.1);
-        //         glVertex2f(1.0, -0.1);
-        //         glVertex2f(-1.0, -0.1);
-        //         glVertex2f(-1.0, 0.1);
-        //     glEnd();
-        // glPopMatrix(); // 2
-
-    glPopMatrix(); // 1
-
-    glutSwapBuffers();
-}
-
-void keyboard (unsigned char key, int x, int y){
-    switch (key) {
-        case 'w':
-        case 'W':
-            rotacaoBraco = (rotacaoBraco + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 's':
-        case 'S':
-            rotacaoBraco = (rotacaoBraco - 5) % 360;
-            glutPostRedisplay();
-            break;
-
-        case 'e':
-        case 'E':
-            rotacaoCotovelo = (rotacaoCotovelo + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'd':
-        case 'D':
-            rotacaoCotovelo = (rotacaoCotovelo - 5) % 360;
-            glutPostRedisplay();
-            break;
-
-        case 'r':
-        case 'R':
-            rotacaoPerna = (rotacaoPerna + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'f':
-        case 'F':
-            rotacaoPerna = (rotacaoPerna - 5) % 360;
-            glutPostRedisplay();
-            break;
-
-        case 't':
-        case 'T':
-            rotacaoJoelho = (rotacaoJoelho + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'g':
-        case 'G':
-            rotacaoJoelho = (rotacaoJoelho - 5) % 360;
-            glutPostRedisplay();
-            break;
-
-        case 'q':
-        case 'Q':
-        case 27:
-            exit(0);
-            break;
-
-        default:
-            break;
+int mod = 0;
+void andar()
+{
+    RenderScene();
+
+    if (mod == 0)
+    {
+        if (rotacaoCoxaDir < 45)
+        {
+            rotacaoCoxaDir += 1;
+            rotacaoCoxaEsq -= 1;
+            rotacaoPernaDir += .75;
+            rotacaoPernaEsq -=.75;
+            yRot += 1;
+        }
+        else
+        {
+            mod = 1;
+        }
+    }
+    else
+    {
+        if (rotacaoCoxaDir > -45)
+        {
+            rotacaoPernaDir -= .75;
+            rotacaoPernaEsq +=.75;
+            rotacaoCoxaDir -= 1;
+            rotacaoCoxaEsq += 1;
+            yRot += 1;
+        }
+        else
+        {
+            mod = 0;
+        }
     }
 }
+int main(int argc, char *argv[])
+{
 
-void SpecialKeys(int key, int x, int y){  
-    if(key == GLUT_KEY_LEFT)  
-        ROTACAO_Y -= 5.0f;  
-  
-    if(key == GLUT_KEY_RIGHT)  
-        ROTACAO_Y += 5.0f;  
-    
-    if(key == GLUT_KEY_UP)
-        ROTACAO_X += 5.0f;
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("RoboArticulado");
+    glutReshapeFunc(ChangeSize);
+    glutDisplayFunc(RenderScene);
+    glutIdleFunc(andar);
+    glutKeyboardFunc(NormalKeys);
+    SetupRC();
+    glutMainLoop();
 
-    if(key == GLUT_KEY_DOWN)
-        ROTACAO_X -= 5.0f;
-
-    if(key == GLUT_KEY_HOME)
-        ROTACAO_Z += 5.0F;
-    
-    if(key == GLUT_KEY_END)
-        ROTACAO_Z -= 5.0F;
-
-    ROTACAO_X = (GLfloat)((const int)ROTACAO_X % 360);  
-    ROTACAO_Y = (GLfloat)((const int)ROTACAO_Y % 360);  
-    ROTACAO_Z = (GLfloat)((const int)ROTACAO_Z % 360);  
-  
-    // Refresh the Window  
-    glutPostRedisplay();  
-}
-
-int main(int argc, char** argv){
-   glutInit(&argc, argv);
-   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-   glutInitWindowSize (1300, 700); 
-   glutCreateWindow("Robo");
-   glutDisplayFunc(display); 
-   glutReshapeFunc(ChangeSize);
-   glutKeyboardFunc(keyboard);
-   glutSpecialFunc(SpecialKeys);
-   SetupRC();
-   glutMainLoop();
-   return 0;
+    return 0;
 }
