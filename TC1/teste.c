@@ -7,7 +7,8 @@ static GLfloat yRot = 0.0f;
 static GLfloat xRot = 0.0f;
 static GLfloat rot = 0.0f;
 static GLfloat rot2 = 0.0f;
-int indo = -1, count  = 0;
+int indo = 1, count  = 0;
+int flag = 0;
 
 // Change viewing volume and viewport.  Called when window is resized  
 void ChangeSize(int w, int h)  

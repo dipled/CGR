@@ -6,6 +6,9 @@
 static GLfloat yRot = 0.0f;
 static GLfloat xRot = 0.0f;
 static GLfloat rot = 20.0f;
+static GLfloat rot2 = 0.0f;
+int flag = 0;
+int flag2 = 0;
 int indo = 1;
 
 // Change viewing volume and viewport.  Called when window is resized
@@ -106,6 +109,27 @@ void RenderScene(void)
         if (rot == 30)
             indo = 1;
     }
+    if (flag2)
+    {
+        if (flag)
+        {
+            rot2 -= 2;
+            if (rot2 == -30)
+                flag = 0;
+        }
+        else
+        {
+            rot2 += 2;
+            if (rot2 == 30)
+                flag = 1;
+        }
+    }
+    else{
+        if(rot2 > 0)
+            rot2 -=2;
+        else
+            rot2 +=2;
+    }
 
     // body
     glColor3f(0.7f, 0.7f, 0.7f);
@@ -117,6 +141,7 @@ void RenderScene(void)
     // head
     glColor3f(0.7f, 0.7f, 0.7f);
     glPushMatrix(); // save transform matrix state
+    glRotatef(rot2,0,1,0);
     glTranslatef(0.0f, .5f, 0.0f);
     glScalef(.8, 1.05, 1);
     glutSolidCube(0.4);
@@ -135,10 +160,12 @@ void RenderScene(void)
     // eyes
     glColor3f(.0f, 1.0f, .3f);
     glPushMatrix();
+        glRotatef(rot2,0,1,0);
     glTranslatef(-0.08f, .56f, 0.22f);
     gluSphere(pObj, 0.045f, 26, 13);
     glPopMatrix();
     glPushMatrix();
+        glRotatef(rot2,0,1,0);
     glTranslatef(0.08f, .56f, 0.22f);
     gluSphere(pObj, 0.045f, 26, 13);
     glPopMatrix();
@@ -146,18 +173,21 @@ void RenderScene(void)
     // mouth
     glColor3f(.0f, 0.0f, 0.0f);
     glPushMatrix();
+        glRotatef(rot2,0,1,0);
     glTranslatef(0.0, .45, 0.2f);
     glScalef(0.4f, 0.08f, 0.02f);
     glutSolidCube(0.5);
     glPopMatrix();
     glColor3f(1.0f, 0.0f, 0.0f);
     glPushMatrix();
+        glRotatef(rot2,0,1,0);
     glTranslatef(0.05, .41, 0.2f);
     glScalef(0.2f, 0.08f, 0.02f);
     glutSolidCube(0.5);
     glPopMatrix();
     glColor3f(.0f, 0.0f, 0.0f);
     glPushMatrix();
+        glRotatef(rot2,0,1,0);
     glTranslatef(-.02, .41, 0.2f);
     glScalef(0.08f, 0.08f, 0.02f);
     glutSolidCube(0.5);
@@ -384,6 +414,24 @@ void RenderScene(void)
     glutSwapBuffers();
 }
 
+void NormalKeys(unsigned char key, int x, int y)
+{
+        switch (key)
+
+    {
+    case 'z':
+        flag2 = 0;
+    break;
+    case 'x':
+        flag2 = 1;
+    break;
+    }
+    yRot = (GLfloat)((const int)yRot % 360);
+    xRot = (GLfloat)((const int)xRot % 360);
+    glutPostRedisplay();
+    //Nao quebra o aspect ratio nem nada :)
+    ChangeSize(glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_WINDOW_HEIGHT));
+}
 int main(int argc, char *argv[])
 {
 
@@ -393,6 +441,8 @@ int main(int argc, char *argv[])
     glutCreateWindow("RoboArticulado");
     glutReshapeFunc(ChangeSize);
     glutDisplayFunc(RenderScene);
+    glutKeyboardFunc(NormalKeys);
+
     SetupRC();
 
     glutMainLoop();
