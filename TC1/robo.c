@@ -194,7 +194,7 @@ void RenderScene(void)
 	glPushMatrix();
 	glTranslatef(0.3f, 0.2, 0.0f);
 	// glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-	gluSphere(pObj, 0.08, 26, 13);
+	gluSphere(pObj, 0.10, 26, 13);
 
 	// braco
 	glPushMatrix();
@@ -224,7 +224,7 @@ void RenderScene(void)
 	glScalef(0.8, 1.2, 0.6);
 	glTranslatef(0.028, -0.2, 0.0f);
 	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-	gluSphere(pObj, 0.08f, 26, 13);
+	gluSphere(pObj, 0.10f, 26, 13);
 
 	// dedo
 	glPushMatrix();
@@ -247,7 +247,7 @@ void RenderScene(void)
 	// ombro direito
 	glPushMatrix();
 	glTranslatef(-0.3f, 0.2, 0.0f);
-	gluSphere(pObj, 0.08, 26, 13);
+	gluSphere(pObj, 0.10, 26, 13);
 
 	// braco
 	glPushMatrix();
@@ -275,7 +275,7 @@ void RenderScene(void)
 	glScalef(0.8, 1.2, 0.6);
 	glTranslatef(-0.028, -0.2, 0.0f);
 	glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
-	gluSphere(pObj, 0.08f, 26, 13);
+	gluSphere(pObj, 0.10f, 26, 13);
 
 	// dedo
 	glPushMatrix();
