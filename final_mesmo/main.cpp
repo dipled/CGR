@@ -123,7 +123,6 @@ int winningObjectIndex(vector<double> objIntersec)
 		if (max > 0)
 		{
 			// retorna o índice da intersecção que está vencendo
-			// return the index of the winning intersection
 			int idx = 0;
 			// queremos apenas intersecções positivas, obivamente
 			for (int i = 0; i < objIntersec.size(); i++)
