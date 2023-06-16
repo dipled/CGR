@@ -305,8 +305,8 @@ int main(int argc, char *argv[])
 
 	// Obs.: https://en.cppreference.com/w/cpp/language/dynamic_cast
 
-	//fonteLuz.push_back(dynamic_cast<Light *>(&luzCena));
-	fonteLuz.push_back(dynamic_cast<Light *>(&luzTeste));
+	fonteLuz.push_back(dynamic_cast<Light *>(&luzCena));
+	// fonteLuz.push_back(dynamic_cast<Light *>(&luzTeste));
 
 	vector<Object *> objCena;
 	objCena.push_back(dynamic_cast<Object *>(&sphere_1));

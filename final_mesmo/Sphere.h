@@ -51,7 +51,6 @@ class Sphere : public Object {
 		// c = [(Xo - Xc)² + (Yo - Yc)² + (Zo - Zc)² - r²]
 		// Portanto:
 		// t = (-b ± √Δ)/(2a)
-
 		Vect ray_origin = ray.getRayOrigin();
 		double ray_origin_x = ray_origin.getVectX();
 		double ray_origin_y = ray_origin.getVectY();

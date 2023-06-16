@@ -69,7 +69,7 @@ Sphere sphere_11(Vect(5, 3, 0), 1, full_white);
 //Plano
 Plane ground(Y, -1, red);
 Plane wall(Vect(1, 0, -1), -10, blue);
-Plane wall_2(Vect(0, 0, -3), -10, Color(0,1,0,0));
+Plane wall_2(Vect(0, 0, -3), -10, Color(0.1,.1,.1,0));
 Plane wall_3(Vect(0, 0, 3), -10, Color(0.9, 0.3, 0.8, 0));
 
 #endif
