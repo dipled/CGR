@@ -3,7 +3,7 @@
 #include "particulas.h"
 #include <math.h>
 // float angulo = 0.0;
-#define NUM 5000
+#define NUM 2000
 
 Particula fogo[NUM];
 
@@ -22,7 +22,7 @@ void iniciaParticulas(int part)
 	fogo[part].velocidade = 3.15;
 	fogo[part].vivo = FALSE;
 	// define o tamanho
-	fogo[part].raio = (double)(15 + rand() % 10) / 2000;
+	fogo[part].raio = (double)(15 + rand() % 10) / 1000;
 }
 
 void fogar()
@@ -61,18 +61,18 @@ void fogar()
 				}
 				subida = !(subida);
 			}
-			else if (fogo[i].pos_x >= -0.1 && fogo[i].pos_x <= 0.0)
+			else if (fogo[i].pos_x >= -0.1 && fogo[i].pos_x <= 0.1)
 			{
 				fogo[i].pos_x = fogo[i].pos_x;
 			}
 
 			else
 			{
-				if (fogo[i].pos_x >=0.0)
+				if (fogo[i].pos_x >=0.1)
 				{
 					fogo[i].pos_x += fogo[i].velocidade / subidax;
 				}
-				else if (fogo[i].pos_x <= 0.0)
+				else if (fogo[i].pos_x <= 0.1)
 				{
 					fogo[i].pos_x += -fogo[i].velocidade / subidax;
 				}
