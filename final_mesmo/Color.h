@@ -33,10 +33,12 @@ class Color {
 		return Color (red + color.getColorRed(), green + color.getColorGreen(), blue + color.getColorBlue(), special);
 	}
 	
+	// Produto escalar (dot product):
 	Color colorMultiply(Color color) {
 		return Color (red*color.getColorRed(), green*color.getColorGreen(), blue*color.getColorBlue(), special);
 	}
-	
+
+	// Limita as cores pois deve se ter que 0 <= r,g,b <= 1: 
 	Color clip() {
 		double alllight = red + green + blue;
 		double excesslight = alllight - 3;

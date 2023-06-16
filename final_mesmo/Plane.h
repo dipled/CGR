@@ -29,17 +29,24 @@ class Plane : public Object {
 		return normal;
 	}
 	
+	// Note que a intersecção entre um objeto qualquer e um raio é uma constante b tal que o vetor de direção...
+	// ... do raio multiplicado por b resulta no ponto em que a reta dada por este vetor e sua origem intersecta o objeto: 
 	virtual double findIntersection(Ray ray) {
 		Vect ray_direction = ray.getRayDirection();
 		
+		// Produto escalar n . direção:
 		double a = ray_direction.dotProduct(normal);
 		
-		// se o ray nao for paralelo ao plano
+		// Se o ray nao for paralelo ao plano
 		if(a != 0) {
-			double b = normal.dotProduct(ray.getRayOrigin().vectAdd(normal.vectMult(distance).negative()));
-			return -1*b/a;
+			Vect p0 = normal.vectMult(distance);
+			Vect l0 = ray.getRayOrigin();
+			return (p0.vectAdd(l0.negative())).dotProduct(normal)/a;
+			// Explicação detalhada em: 
+			// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection.html
 		}
 
+		// Caso não haja intersecção:
 		return -1;
 	}
 	

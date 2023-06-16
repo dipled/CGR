@@ -275,24 +275,38 @@ int main(int argc, char *argv[])
 	RGBType *pixels = new RGBType[n];
 
 	//Buga quando campo.getVectX() é menor que 3
-	if (posCam.getVectX() < 3)
-	{
-		posCam.setVectX(3);
-	}
+	//if (posCam.getVectX() < 3)
+	//{
+	//	posCam.setVectX(3);
+	//}
 
-	//Diferença entre a posição da camera
+	// Diferença entre a posição da camera e o ponto de look at, isto é a direção em que a câmera olha:
+	// 	Dir = P_cam - L_at
 	Vect diferenca(posCam.getVectX() - look_at.getVectX(), posCam.getVectY() - look_at.getVectY(), posCam.getVectZ() - look_at.getVectZ());
 
+	// Normalizando Dir:
 	Vect dirCam = diferenca.negative().normalize();
+	// Vetor que aponta para a lateral do plano da câmera:
 	Vect camright = Y.crossProduct(dirCam).normalize();
+	// Note que o plano da cãmera sempre tem a aresta de cima paralela ao plano xz, a aparencia de estar inclinado ocorre devido a direção dos raios...
+	// ... que saem dos pixels neste plano (os raios podem sair inclinados pra baixo ou pra cima)
+
+	// Vetor que aponta para baixo do plano da câmera:
 	Vect camdown = camright.crossProduct(dirCam);
+
+	// Lembrar que a câmera é um plano (é infinito).
 
 	Camera camera(posCam, dirCam, camright, camdown);
 
 	Light luzCena(posLuz, white_light);
+	Light luzTeste(Vect(0, 0, 0), Color(0.8, 0, 1, 0));
 
 	vector<Light *> fonteLuz;
-	fonteLuz.push_back(dynamic_cast<Light *>(&luzCena));
+
+	// Obs.: https://en.cppreference.com/w/cpp/language/dynamic_cast
+
+	//fonteLuz.push_back(dynamic_cast<Light *>(&luzCena));
+	fonteLuz.push_back(dynamic_cast<Light *>(&luzTeste));
 
 	vector<Object *> objCena;
 	objCena.push_back(dynamic_cast<Object *>(&sphere_1));
@@ -307,11 +321,11 @@ int main(int argc, char *argv[])
 	objCena.push_back(dynamic_cast<Object *>(&sphere_10));
 	objCena.push_back(dynamic_cast<Object *>(&sphere_11));
 
-	// objCena.push_back(dynamic_cast<Object *>(&sphere_5));
+	//objCena.push_back(dynamic_cast<Object *>(&sphere_5));
 	objCena.push_back(dynamic_cast<Object *>(&ground));
 	objCena.push_back(dynamic_cast<Object *>(&wall));
-	// objCena.push_back(dynamic_cast<Object*>(&wall_2));
-	// objCena.push_back(dynamic_cast<Object*>(&wall_3));
+	objCena.push_back(dynamic_cast<Object*>(&wall_2));
+	objCena.push_back(dynamic_cast<Object*>(&wall_3));
 
 	int thisone, aa_index;
 	double xamnt, yamnt;
@@ -325,25 +339,32 @@ int main(int argc, char *argv[])
 	{
 		for (int y = 0; y < height; y++)
 		{
+			// Cálcula o índice do pixel no vetor de pixels:
 			thisone = y * width + x;
 
-			// start with a blank pixel
+			// Começa com pixel branco:
 			double tempRed;
 			double tempGreen;
 			double tempBlue;
 
-			// create the ray from the camera to this pixel
+			// Criar um raio da câmera para este pixel:
 
-			// Faz a modificação da imagem, quando redimensiona a janela
+			// Faz a modificação da imagem, quando redimensiona a janela (redimensior para proporção 1:1):
 			if (width > height)
 			{
 				// the image is wider than it is tall
+				// A imagem é mais larga portanto é alta: 
+				
+				// x_amnt = ceil( x/h ) - (w-h)/(2h)
 				xamnt = (x + 0.5) / (double)height - (((width - height) / (double)height) / 2);
+				
+				// y_amnt = ceil( (h-y)/h )
 				yamnt = ((height - y) + 0.5) / height;
 			}
 			else if (height > width)
 			{
-				// the imager is taller than it is wide
+				// the imager is taller than it is wider
+				// A imagem é mais larga portanto é larga:
 				xamnt = (x + 0.5) / width;
 				yamnt = (height - y + 0.5) / (double)width - ((height - width) / (double)width) / 2;
 			}
@@ -354,16 +375,26 @@ int main(int argc, char *argv[])
 				yamnt = ((height - y) + 0.5) / height;
 			}
 
+
 			//Origem dos raios de luz da câmera e a direção
 			Vect rayOrigem = camera.posCam;
+			
+			// Equação do vetor diretor do raio que sai do pixel:
+			// R = dir + [ (xamnt - 0.5) * camright + (yamnt - 0.5) * camdown]
 			Vect rayDirecao = dirCam.vectAdd(camright.vectMult(xamnt - 0.5).vectAdd(camdown.vectMult(yamnt - 0.5))).normalize();
+			
+			// Obs. 1: este raio deve ser normalizado (os cálculos no código consideram o vetor de direção como unitário); 
+			// Obs. 2: a direção do raio é movida para ser direcionado para os pixels diferentes, pois o vetor dir é a direção em relação...
+			// ... ao pixel central.
 
 			Ray rayCamera(rayOrigem, rayDirecao);
 
+			// Vetor de cada parâmetro que indica uma intersecção, isto é, se a reta do raio é dada por R = t*v + o, estes serão...
+			// ... os valores de t para os quais há intersecção com algum objeto: 
 			vector<double> intersections;
 
-			//Encontra a interseção dos raios da câmera com os objetos em cena
-			//é salvo no vetor a quantidade de raios atingidos em cada objeto
+			// Encontra a interseção dos raios da câmera com os objetos em cena...
+			// ...e salvo no vetor:
 			for (int index = 0; index < objCena.size(); index++)
 			{
 				intersections.push_back(objCena[index]->findIntersection(rayCamera));

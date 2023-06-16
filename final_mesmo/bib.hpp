@@ -1,4 +1,4 @@
-#ifndef _BIB_HPP
+ #ifndef _BIB_HPP
 #define _BIB_HPP
 
 #include <iostream>
@@ -36,7 +36,7 @@ Vect X(1, 0, 0); //Vetor i
 Vect Y(0, 1, 0); //Vetor j
 Vect Z(0, 0, 1); //Vetor k
 
-Vect posCam(-5, 0, -10);
+Vect posCam(-10, 0, -10);
 Vect posLuz(0, 2, 1);
 Vect look_at(0, 0, 0);
 
@@ -69,7 +69,7 @@ Sphere sphere_11(Vect(5, 3, 0), 1, full_white);
 //Plano
 Plane ground(Y, -1, red);
 Plane wall(Vect(1, 0, -1), -10, blue);
-Plane wall_2(Vect(0, 0, -3), -10, gray);
+Plane wall_2(Vect(0, 0, -3), -10, Color(0,1,0,0));
 Plane wall_3(Vect(0, 0, 3), -10, Color(0.9, 0.3, 0.8, 0));
 
 #endif
