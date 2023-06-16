@@ -3,18 +3,18 @@
 
 #include "Vect.h"
 
-class Camera {
-	public:
-
+class Camera
+{
+public:
 	Vect posCam, dirCam, camright, camdown;
 
-	Camera (Vect pos, Vect dir, Vect right, Vect down) {
+	Camera(Vect pos, Vect dir, Vect right, Vect down)
+	{
 		posCam = pos;
 		dirCam = dir;
 		camright = right;
 		camdown = down;
 	}
-	
 };
 
 #endif

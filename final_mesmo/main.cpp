@@ -1,5 +1,5 @@
 #include "bib.hpp"
-//g++ cgr-main.cpp -lGLU -lGL -lglut -o ray
+// g++ cgr-main.cpp -lGLU -lGL -lglut -o ray
 
 struct RGBType
 {
@@ -68,7 +68,7 @@ void savebmp(int w, int h, RGBType *data)
 
 	fwrite(bmpfileheader, 1, 14, f);
 	fwrite(bmpinfoheader, 1, 40, f);
-	//Constroi literalmente pixel por pixel da imagem utilizando RGB
+	// Constroi literalmente pixel por pixel da imagem utilizando RGB
 	for (int i = 0; i < k; i++)
 	{
 		RGBType rgb = data[i];
@@ -91,14 +91,14 @@ int winningObjectIndex(vector<double> objIntersec)
 	// Evita calculos desnecessáios
 	if (objIntersec.size() == 0)
 	{
-		// se não houverem intersecçõoes, retorna -1 
+		// se não houverem intersecçõoes, retorna -1
 		return -1;
 	}
 	else if (objIntersec.size() == 1)
 	{
 		if (objIntersec[0] > 0)
 		{
-			//caso a intersecão seja maior que 0, 0 é o índice de vaor mínimo
+			// caso a intersecão seja maior que 0, 0 é o índice de vaor mínimo
 			return 0;
 		}
 		else
@@ -110,7 +110,7 @@ int winningObjectIndex(vector<double> objIntersec)
 	else
 	{
 
-		//Percorre todo o vetor para encontrar o valor maximo de interseção
+		// Percorre todo o vetor para encontrar o valor maximo de interseção
 		double max = 0;
 		for (int i = 0; i < objIntersec.size(); i++)
 		{
@@ -119,7 +119,7 @@ int winningObjectIndex(vector<double> objIntersec)
 				max = objIntersec[i];
 			}
 		}
-		// então, a partir dovlaor máximo, achamos o valor mínimo positivo 
+		// então, a partir dovlaor máximo, achamos o valor mínimo positivo
 		if (max > 0)
 		{
 			// retorna o índice da intersecção que está vencendo
@@ -153,7 +153,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 
 	Color corFinal = winning_object_color.colorScalar(luzAmbiente);
 
-	//Se a cor especial (quantidade de reflexo) for maior que zero e menor que 1
+	// Se a cor especial (quantidade de reflexo) for maior que zero e menor que 1
 	if (winning_object_color.getColorSpecial() > 0 && winning_object_color.getColorSpecial() <= 1)
 	{
 		// reflexão dos objetos com intensidade especular
@@ -168,7 +168,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 		// determina a primeira intersecção do raio
 		vector<double> intersecReflexao;
 
-		//Adiciona no vetor todos os objetos que tem interseção com o raio refletido
+		// Adiciona no vetor todos os objetos que tem interseção com o raio refletido
 		for (int i = 0; i < objCena.size(); i++)
 		{
 			intersecReflexao.push_back(objCena[i]->findIntersection(reflection_ray));
@@ -176,7 +176,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 
 		int indiceObjReflexo = winningObjectIndex(intersecReflexao);
 
-		//faz o cálculo recursivo para criar uma reflexão entre os objetos, semelhante ao espelho
+		// faz o cálculo recursivo para criar uma reflexão entre os objetos, semelhante ao espelho
 		if (indiceObjReflexo != -1)
 		{
 			// reflection ray missed everthing else
@@ -194,7 +194,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 		}
 	}
 
-	//Percorre o vetor de luzes no cenário
+	// Percorre o vetor de luzes no cenário
 	for (int i = 0; i < fonteLuz.size(); i++)
 	{
 		Vect dirLuz = fonteLuz[i]->posLuz.vectAdd(posIntersec.negative()).normalize();
@@ -219,7 +219,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 				intersecAux.push_back(objCena[i]->findIntersection(raySombra));
 			}
 
-			//Faz o cálculo da sombra
+			// Faz o cálculo da sombra
 			for (int c = 0; c < intersecAux.size(); c++)
 			{
 				if (intersecAux[c] > acuracia)
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
 		posCam.setVectX(3);
 	}
 
-	//Diferença entre a posição da camera
+	// Diferença entre a posição da camera
 	Vect diferenca(posCam.getVectX() - look_at.getVectX(), posCam.getVectY() - look_at.getVectY(), posCam.getVectZ() - look_at.getVectZ());
 
 	Vect dirCam = diferenca.negative().normalize();
@@ -294,7 +294,7 @@ int main(int argc, char *argv[])
 	vector<Object *> objCena;
 	objCena.push_back(dynamic_cast<Object *>(&sphere_1));
 	objCena.push_back(dynamic_cast<Object *>(&sphere_2));
-	//objCena.push_back(dynamic_cast<Object *>(&sphere_3));
+	// objCena.push_back(dynamic_cast<Object *>(&sphere_3));
 	objCena.push_back(dynamic_cast<Object *>(&sphere_4));
 	objCena.push_back(dynamic_cast<Object *>(&sphere_4));
 	objCena.push_back(dynamic_cast<Object *>(&sphere_6));
@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
 				yamnt = ((height - y) + 0.5) / height;
 			}
 
-			//Origem dos raios de luz da câmera e a direção
+			// Origem dos raios de luz da câmera e a direção
 			Vect rayOrigem = camera.posCam;
 			Vect rayDirecao = dirCam.vectAdd(camright.vectMult(xamnt - 0.5).vectAdd(camdown.vectMult(yamnt - 0.5))).normalize();
 
@@ -359,8 +359,8 @@ int main(int argc, char *argv[])
 
 			vector<double> intersections;
 
-			//Encontra a interseção dos raios da câmera com os objetos em cena
-			//é salvo no vetor a quantidade de raios atingidos em cada objeto
+			// Encontra a interseção dos raios da câmera com os objetos em cena
+			// é salvo no vetor a quantidade de raios atingidos em cada objeto
 			for (int index = 0; index < objCena.size(); index++)
 			{
 				intersections.push_back(objCena[index]->findIntersection(rayCamera));
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
 
 			int indice = winningObjectIndex(intersections);
 
-			//Se nao houver interseção do ray com o objeto, o pixel é marcado como preto
+			// Se nao houver interseção do ray com o objeto, o pixel é marcado como preto
 			if (indice == -1)
 			{
 				// deixa o background preto
@@ -376,8 +376,8 @@ int main(int argc, char *argv[])
 				tempGreen = 0;
 				tempBlue = 0;
 
-				//Se houver intersecção, é calculado na função getColorAt a cor (preto (sombra), branco (reflexo da luz)
-				// ou a propria cor do objeto)
+				// Se houver intersecção, é calculado na função getColorAt a cor (preto (sombra), branco (reflexo da luz)
+				//  ou a propria cor do objeto)
 			}
 			else
 			{
