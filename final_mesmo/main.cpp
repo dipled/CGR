@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
 	Vect dirCam = diferenca.negative().normalize();
 	// Vetor que aponta para a lateral do plano da câmera:
 	Vect camright = Y.crossProduct(dirCam).normalize();
-	// Note que o plano da cãmera sempre tem a aresta de cima paralela ao plano xz, a aparencia de estar inclinado ocorre devido a direção dos raios...
+	// Note que o plano da câmera sempre tem a aresta de cima paralela ao plano xz, a aparencia de estar inclinado ocorre devido a direção dos raios...
 	// ... que saem dos pixels neste plano (os raios podem sair inclinados pra baixo ou pra cima)
 
 	// Vetor que aponta para baixo do plano da câmera:
