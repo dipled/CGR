@@ -1,5 +1,6 @@
 #include "bib.hpp"
-//g++ cgr-main.cpp -lGLU -lGL -lglut -o ray
+#include <cmath>
+// g++ cgr-main.cpp -lGLU -lGL -lglut -o ray
 
 struct RGBType
 {
@@ -155,18 +156,26 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 
 	Color corFinal = winning_object_color.colorScalar(luzAmbiente);
 
-	//Se a cor especial (quantidade de reflexo) for maior que zero e menor que 1
+	//Se a cor especial (quantidade de reflexo) for maior que zero e menor que 1:
 	if (winning_object_color.getColorSpecial() > 0 && winning_object_color.getColorSpecial() <= 1)
 	{
-		// reflection from objects with specular intensity
+		// Reflexão de objetos com intensidade especular:
 		double dot1 = winning_object_normal.dotProduct(rayDirIntersec.negative());
+
 		Vect scalar1 = winning_object_normal.vectMult(dot1);
 		Vect add1 = scalar1.vectAdd(rayDirIntersec);
 		Vect scalar2 = add1.vectMult(2);
 		Vect add2 = rayDirIntersec.negative().vectAdd(scalar2);
 		Vect reflection_direction = add2.normalize();
 
+		// Sendo L: direção do raio, N: normal a superfície de intersecção, R: direção do raio de reflexão, R é...
+		// ... dado por:
+		// R = L - 2.(L ⋅ N)⋅ N
+
 		Ray reflection_ray(posIntersec, reflection_direction);
+		// A reta Re do raio de reflexão, sendo Pin o ponto de intersecção é dada por:
+		// Re = R.t + Pin
+
 
 		// determine what the ray intersects with first
 		vector<double> intersecReflexao;
@@ -282,31 +291,33 @@ int main(int argc, char *argv[])
 
 	// Diferença entre a posição da camera e o ponto de look at, isto é a direção em que a câmera olha:
 	// 	Dir = P_cam - L_at
-	Vect diferenca(posCam.getVectX() - look_at.getVectX(), posCam.getVectY() - look_at.getVectY(), posCam.getVectZ() - look_at.getVectZ());
+	Vect diferenca = look_at.vectAdd(posCam.negative());
 
 	// Normalizando Dir:
-	Vect dirCam = diferenca.negative().normalize();
+	Vect dirCam = diferenca.normalize();
 	// Vetor que aponta para a lateral do plano da câmera:
 	Vect camright = Y.crossProduct(dirCam).normalize();
-	// Note que o plano da cãmera sempre tem a aresta de cima paralela ao plano xz, a aparencia de estar inclinado ocorre devido a direção dos raios...
-	// ... que saem dos pixels neste plano (os raios podem sair inclinados pra baixo ou pra cima)
+	// Note que o plano da cãmera sempre tem a aresta de cima paralela ao plano xz, a aparencia de... 
+	// ... estar inclinado ocorre devido a direção dos raios que saem dos pixels...
+	// ... neste plano (os raios podem sair inclinados pra baixo ou pra cima)
+	// Note que este produto vetorial é normalizado;
 
 	// Vetor que aponta para baixo do plano da câmera:
-	Vect camdown = camright.crossProduct(dirCam);
+	Vect camdown = camright.crossProduct(dirCam).normalize();
 
 	// Lembrar que a câmera é um plano (é infinito).
 
 	Camera camera(posCam, dirCam, camright, camdown);
 
 	Light luzCena(posLuz, white_light);
-	Light luzTeste(Vect(0, 0, 0), Color(0.8, 0, 1, 0));
+	// Light luzTeste(Vect(0, 0, 0), Color(0.8, 0, 1, 0));
 
 	vector<Light *> fonteLuz;
 
 	// Obs.: https://en.cppreference.com/w/cpp/language/dynamic_cast
 
-	//fonteLuz.push_back(dynamic_cast<Light *>(&luzCena));
-	fonteLuz.push_back(dynamic_cast<Light *>(&luzTeste));
+	fonteLuz.push_back(dynamic_cast<Light *>(&luzCena));
+	// fonteLuz.push_back(dynamic_cast<Light *>(&luzTeste));
 
 	vector<Object *> objCena;
 	objCena.push_back(dynamic_cast<Object *>(&sphere_1));
@@ -324,8 +335,8 @@ int main(int argc, char *argv[])
 	//objCena.push_back(dynamic_cast<Object *>(&sphere_5));
 	objCena.push_back(dynamic_cast<Object *>(&ground));
 	objCena.push_back(dynamic_cast<Object *>(&wall));
-	objCena.push_back(dynamic_cast<Object*>(&wall_2));
-	objCena.push_back(dynamic_cast<Object*>(&wall_3));
+	// objCena.push_back(dynamic_cast<Object*>(&wall_2));
+	// objCena.push_back(dynamic_cast<Object*>(&wall_3));
 
 	int thisone, aa_index;
 	double xamnt, yamnt;
@@ -352,27 +363,52 @@ int main(int argc, char *argv[])
 			// Faz a modificação da imagem, quando redimensiona a janela (redimensior para proporção 1:1):
 			if (width > height)
 			{
-				// the image is wider than it is tall
-				// A imagem é mais larga portanto é alta: 
 				
-				// x_amnt = ceil( x/h ) - (w-h)/(2h)
-				xamnt = (x + 0.5) / (double)height - (((width - height) / (double)height) / 2);
+				// x_amnt = ( (x + 0.5) /h ) - (w-h)/(2h)
+				// xamnt = ((x + 0.5) / (double)height) - ((width - height) / (double)height) / 2; 
+				xamnt = ((x + 0.5) / (double)height) - ((width - height) / ((double) 2*height)); 
+
+				// Note que:
+				// (a) para imagem não ficar esticada em alguma direção, a variação de uma unidade em x deve ser igual...
+				// ... a variação de uma unidade em y por isto se divide x + 0.5 pelo height;
+				// 
+				// (b)  entretando como width > heigth quando x é maior que o height ele x/height > 1, portanto deve-se...
+				// ... ajustar para que o valor máximo da "normalização" seja 1, para isso note que quando x = w-1,
+				// ... x_amnt = ( (x + 0.5) /h ) - (w-h)/(h)
+				// ... x_amnt = ( (w - 1 + 0.5) /h ) - (w-h)/(h)
+				// ... x_amnt = (w - 0.5 - w + h)/h
+				// ... x_amnt = (h - 0.5)/h
 				
 				// y_amnt = ceil( (h-y)/h )
 				yamnt = ((height - y) + 0.5) / height;
+
+				// Note que a primeira para 
+
+
 			}
 			else if (height > width)
 			{
 				// the imager is taller than it is wider
-				// A imagem é mais larga portanto é larga:
+				// A imagem é mais alta portanto deve ser larga:
+				
 				xamnt = (x + 0.5) / width;
 				yamnt = (height - y + 0.5) / (double)width - ((height - width) / (double)width) / 2;
+				
+				// Com x note que o que ocorre aqui é que x é normalizado entre 0 e 1 somado mas se soma 0.5 pois queremos...
+				// ... o centro do pixel, então se subtrai 0.5 para que fique no intervalo [-0.5, 0.5];
+
+				// Com y note que o que ocorre aqui é que y é normalizado entre 0 e 1 somado mas se soma 0.5 pois queremos...
+				// ... o centro do pixel, então se subtrai 0.5 para que fique no intervalo [-0.5, 0.5], entretanto como...
+				// ... neste caso existem mais pixels na vertical deve-se subtrair a porcentagem de pixels a mais dividida...
+				// ... por 2 pois ;
+
 			}
 			else
 			{
-				// the image is square
-				xamnt = (x + 0.5) / width;
-				yamnt = ((height - y) + 0.5) / height;
+				// Se a imagem é quadrada:
+				xamnt = ((x + 0.5) / width);
+				yamnt = (((height - y) + 0.5) / height);
+
 			}
 
 
@@ -400,18 +436,18 @@ int main(int argc, char *argv[])
 				intersections.push_back(objCena[index]->findIntersection(rayCamera));
 			}
 
+			// Indice do objeto com a menor intersecção positiva:
 			int indice = winningObjectIndex(intersections);
 
 			//Se nao houver interseção do ray com o objeto, o pixel é marcado como preto
 			if (indice == -1)
 			{
-				// set the backgroung black
+				// Define a cor de fundo (quando o raio de um pixel não intersect nenhum objeto) como preto:
 				tempRed = 0;
 				tempGreen = 0;
 				tempBlue = 0;
-
-				//Se houver, é calculado na função getColorAt a cor (preto (sombra), branco (reflexo da luz)
-				// ou a propria cod do objeto)
+				// Se houver, é calculado na função getColorAt a cor (preto (sombra), branco (reflexo da luz)...
+				// ... ou a propria cor do objeto)
 			}
 			else
 			{

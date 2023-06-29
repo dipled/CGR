@@ -19,7 +19,7 @@ class Sphere : public Object {
 		color = colorValue;
 	}
 	
-	// method functions
+	// Todas as funções da classe:
 	Vect getSphereCenter () { return center; }
 	double getSphereRadius () { return radius; }
 	virtual Color getColor () { return color; }
