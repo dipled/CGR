@@ -25,11 +25,11 @@
 using namespace std;
 
 int thisone;
-int dpi = 120;
-// int aadepth = 1;
+int dpi = 78;
+int aadepth = 10;
 double aathreshold = 0.1;
-double luzAmbiente = 0.2;
-double acuracia = 0.00000001;
+double luzAmbiente = 0.1;
+double acuracia = 0.00000000000001;
 
 Vect O(0, 0, 0); //vetor origem
 Vect X(1, 0, 0); //Vetor i

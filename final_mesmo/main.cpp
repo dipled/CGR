@@ -88,29 +88,27 @@ void savebmp(int w, int h, RGBType *data)
 int winningObjectIndex(vector<double> objIntersec)
 {
 
-	// prevent unnessary calculations
+	// Se o tamanho do objeto for zero ele vai retornar -1
 	if (objIntersec.size() == 0)
 	{
-		// if there are no intersections
 		return -1;
 	}
 	else if (objIntersec.size() == 1)
 	{
 		if (objIntersec[0] > 0)
 		{
-			// if that intersection is greater than zero then its our index of minimum value
+			
 			return 0;
 		}
 		else
 		{
-			// otherwise the only intersection value is negative
 			return -1;
 		}
 	}
 	else
 	{
 
-		//Percorre todo o vetor para encontrar o valor maximo de interseção
+		// Percorre todo o vetor para encontrar o valor maximo de interseção
 		double max = 0;
 		for (int i = 0; i < objIntersec.size(); i++)
 		{
@@ -120,14 +118,12 @@ int winningObjectIndex(vector<double> objIntersec)
 			}
 		}
 
-		// then starting from the maximum value find the minimum positive value
+		// Comecando do maximo, vamos achar o minimo positivo
 		if (max > 0)
 		{
 
-			// return the index of the winning intersection
 			int idx = 0;
 
-			// we only want positive intersections
 			for (int i = 0; i < objIntersec.size(); i++)
 			{
 				if (objIntersec[i] > 0 && objIntersec[i] <= max)
@@ -141,7 +137,7 @@ int winningObjectIndex(vector<double> objIntersec)
 		}
 		else
 		{
-			// all the intersections were negative
+			// Caso todas as interseções tenham sido negativas, ele vai retornar -1, indicando que o raio missou o objeto
 			return -1;
 		}
 	}
@@ -183,7 +179,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 		// Caso o índice seja diferente de -1, o raio acertou algum objeto
 		if (indiceObjReflexo != -1)
 		{
-			//Verifica se a interção está acima da nossa acurácia para otimizar as interseções 
+			// Verifica se a interção está acima da nossa acurácia para otimizar as interseções 
 			if (intersecReflexao[indiceObjReflexo] > acuracia)
 			{
 				// Determina qual será a posição e direção do raio refletido a partir da interseção
@@ -223,7 +219,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 				intersecAux.push_back(objCena[i]->findIntersection(raySombra));
 			}
 
-			//Faz o cálculo da sombra
+			// Faz o cálculo da sombra
 			for (int c = 0; c < intersecAux.size(); c++)
 			{
 				if (intersecAux[c] > acuracia)
@@ -275,14 +271,8 @@ int main(int argc, char *argv[])
 
 	RGBType *pixels = new RGBType[n];
 
-	//Buga quando campo.getVectX() é menor que 3
-	//if (posCam.getVectX() < 3)
-	//{
-	//	posCam.setVectX(3);
-	//}
-
 	// Diferença entre a posição da camera e o ponto de look at, isto é a direção em que a câmera olha:
-	// 	Dir = P_cam - L_at
+	// Dir = P_cam - L_at
 	Vect diferenca(posCam.getVectX() - look_at.getVectX(), posCam.getVectY() - look_at.getVectY(), posCam.getVectZ() - look_at.getVectZ());
 
 	// Normalizando Dir:
@@ -353,8 +343,6 @@ int main(int argc, char *argv[])
 			// Faz a modificação da imagem, quando redimensiona a janela (redimensior para proporção 1:1):
 			if (width > height)
 			{
-				// the image is wider than it is tall
-				// A imagem é mais larga portanto é alta: 
 				
 				// x_amnt = ceil( x/h ) - (w-h)/(2h)
 				xamnt = (x + 0.5) / (double)height - (((width - height) / (double)height) / 2);
@@ -364,20 +352,17 @@ int main(int argc, char *argv[])
 			}
 			else if (height > width)
 			{
-				// the imager is taller than it is wider
-				// A imagem é mais larga portanto é larga:
 				xamnt = (x + 0.5) / width;
 				yamnt = (height - y + 0.5) / (double)width - ((height - width) / (double)width) / 2;
 			}
 			else
 			{
-				// the image is square
 				xamnt = (x + 0.5) / width;
 				yamnt = ((height - y) + 0.5) / height;
 			}
 
 
-			//Origem dos raios de luz da câmera e a direção
+			// Origem dos raios de luz da câmera e a direção
 			Vect rayOrigem = camera.posCam;
 			
 			// Equação do vetor diretor do raio que sai do pixel:
@@ -403,16 +388,15 @@ int main(int argc, char *argv[])
 
 			int indice = winningObjectIndex(intersections);
 
-			//Se nao houver interseção do ray com o objeto, o pixel é marcado como preto
+			// Se nao houver interseção do ray com o objeto, o pixel é marcado como preto
 			if (indice == -1)
 			{
-				// set the backgroung black
 				tempRed = 0;
 				tempGreen = 0;
 				tempBlue = 0;
 
-				//Se houver, é calculado na função getColorAt a cor (preto (sombra), branco (reflexo da luz)
-				// ou a propria cod do objeto)
+				// Se houver, é calculado na função getColorAt a cor (preto (sombra), branco (reflexo da luz)
+				// ou a propria cor do objeto)
 			}
 			else
 			{
