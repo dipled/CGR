@@ -41,7 +41,7 @@ class Plane : public Object {
 		if(a != 0) {
 			Vect p0 = normal.vectMult(distance);
 			Vect l0 = ray.getRayOrigin();
-			return (p0.vectAdd(l0.negative())).dotProduct(normal)/a;
+			return (p0.vectAdd(l0.negative())).dotProduct(normal)/a - 0.000001;
 			// Explicação detalhada em: 
 			// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection.html
 		}

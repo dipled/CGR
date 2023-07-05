@@ -25,7 +25,7 @@
 using namespace std;
 
 int thisone;
-int dpi = 72;
+int dpi = 120;
 // int aadepth = 1;
 double aathreshold = 0.1;
 double luzAmbiente = 0.2;
