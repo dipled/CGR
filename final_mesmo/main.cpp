@@ -155,10 +155,11 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 
 	Color corFinal = winning_object_color.colorScalar(luzAmbiente);
 
-	//Se a cor especial (quantidade de reflexo) for maior que zero e menor que 1
+	// Se a cor especial (quantidade de reflexo) for maior que zero e menor que 1 ele irá te que criar um raio de
+	// Reflexão e verificar se este raio criado intersecta outro objeto
 	if (winning_object_color.getColorSpecial() > 0 && winning_object_color.getColorSpecial() <= 1)
 	{
-		// reflection from objects with specular intensity
+		// Adiciona um raio de reflexão especular que será futuramente calculado
 		double dot1 = winning_object_normal.dotProduct(rayDirIntersec.negative());
 		Vect scalar1 = winning_object_normal.vectMult(dot1);
 		Vect add1 = scalar1.vectAdd(rayDirIntersec);
@@ -168,28 +169,28 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 
 		Ray reflection_ray(posIntersec, reflection_direction);
 
-		// determine what the ray intersects with first
+		// Determina qual é a primeira interseção do raio
 		vector<double> intersecReflexao;
-		//Adiciona no vetor todos os objetos que tem interseção com o raio refletido
+		// Adiciona no vetor todos os objetos que tem interseção com o raio refletido
 		for (int i = 0; i < objCena.size(); i++)
 		{
 			intersecReflexao.push_back(objCena[i]->findIntersection(reflection_ray));
 		}
-
+		// Pega o índice do objeto que foi refletido
 		int indiceObjReflexo = winningObjectIndex(intersecReflexao);
 
-		//faz o cálculo recursivo para criar uma reflexão entre os objetos, semelhante ao espelho
+		// faz o cálculo recursivo para criar uma reflexão entre os objetos, semelhante ao espelho
+		// Caso o índice seja diferente de -1, o raio acertou algum objeto
 		if (indiceObjReflexo != -1)
 		{
-			// reflection ray missed everthing else
+			//Verifica se a interção está acima da nossa acurácia para otimizar as interseções 
 			if (intersecReflexao[indiceObjReflexo] > acuracia)
 			{
-				// determine the position and direction at the point of intersection with the reflection ray
-				// the ray only affects the color if it reflected off something
-
+				// Determina qual será a posição e direção do raio refletido a partir da interseção
 				Vect posIntersecReflete = posIntersec.vectAdd(reflection_direction.vectMult(intersecReflexao.at(indiceObjReflexo)));
 				Vect dirRayReflete = reflection_direction;
 
+				// Pega a cor final que será refletida, chamando recursivamente esta fução para continuar refletindo até o raio missar tudo
 				Color corRefletido = getColorAt(posIntersecReflete, dirRayReflete, objCena, indiceObjReflexo, fonteLuz);
 
 				corFinal = corFinal.colorAdd(corRefletido.colorScalar(winning_object_color.getColorSpecial()));
@@ -197,7 +198,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 		}
 	}
 
-	//Percorre o vetor de luzes no cenário
+	// Percorre o vetor de luzes no cenário
 	for (int i = 0; i < fonteLuz.size(); i++)
 	{
 		Vect dirLuz = fonteLuz[i]->posLuz.vectAdd(posIntersec.negative()).normalize();
@@ -211,7 +212,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 			Vect distance_to_light = fonteLuz[i]->posLuz.vectAdd(posIntersec.negative()).normalize();
 			float distance_to_light_magnitude = distance_to_light.magnitude();
 
-			//Cria o ray da sombra, onde a origem é a interseção entre os objetos
+			// Cria o ray da sombra, onde a origem é a interseção entre os objetos
 			// e a direção é o sentido da fonte luminosa
 			Ray raySombra(posIntersec, fonteLuz[i]->posLuz.vectAdd(posIntersec.negative()).normalize());
 
@@ -233,7 +234,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 					}
 				}
 			}
-
+			// Se o objeto tiver sombra, precisamos ainda somar no vetor de cores a cor da fonte de luz
 			if (!sombra)
 			{
 				corFinal = corFinal.colorAdd(winning_object_color.colorMultiply(fonteLuz[i]->corLuz).colorScalar(cos));
@@ -258,7 +259,7 @@ Color getColorAt(Vect posIntersec, Vect rayDirIntersec, vector<Object *> objCena
 			}
 		}
 	}
-
+	// No final, vai retornar a resultade da cor, capada para valores dentro dos limites RGB
 	return corFinal.clip();
 }
 
