@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
 	objCena.push_back(dynamic_cast<Object*>(&wall_2));
 	objCena.push_back(dynamic_cast<Object*>(&wall_3));
 
-	int thisone, aa_index;
+	int thisone;
 	double xamnt, yamnt;
 
 	string entrada;

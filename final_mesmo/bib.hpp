@@ -36,7 +36,7 @@ Vect X(1, 0, 0); //Vetor i
 Vect Y(0, 1, 0); //Vetor j
 Vect Z(0, 0, 1); //Vetor k
 
-Vect posCam(-10, 0, -10);
+Vect posCam(-5, 1, -10);
 Vect posLuz(0, 2, 1);
 Vect look_at(0, 0, 0);
 
@@ -59,7 +59,7 @@ Sphere sphere_3(Vect(0, 1, -2), 0.7, white_light);
 Sphere sphere_4(Vect(-4.5, 1, 4), 1, maroon);
 //Sphere sphere_5(Vect(2, 3, 7), 3.7, maroon);
 
-Sphere sphere_6(Vect(-5, 3, 0), 1, full_white);
+Sphere sphere_6(Vect(-5, 3, 0), 1, white_light);
 Sphere sphere_7(Vect(-3, 3, 0), 1, full_white);
 Sphere sphere_8(Vect(-1, 3, 0), 1, full_white);
 Sphere sphere_9(Vect(1, 3, 0), 1, full_white);
@@ -67,9 +67,9 @@ Sphere sphere_10(Vect(3, 3, 0), 1, full_white);
 Sphere sphere_11(Vect(5, 3, 0), 1, full_white);
 
 //Plano
-Plane ground(Y, -1, red);
+Plane ground(Y, -1, white_light);
 Plane wall(Vect(1, 0, -1), -10, blue);
-Plane wall_2(Vect(0, 0, -3), -10, Color(0.1,.1,.1,0));
+Plane wall_2(Vect(0, 0, -3), -10, Color(0.1,.1,.1,0.5));
 Plane wall_3(Vect(0, 0, 3), -10, Color(0.9, 0.3, 0.8, 0));
 
 #endif
