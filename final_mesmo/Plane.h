@@ -45,7 +45,7 @@ class Plane : public Object {
 			// Sendo r o vetor de direção do raio, n a normal ao plano, p0 o ponto cujo a reta da pelo...
 			// ... vetor n incide no plano, l0 a origem do raio, a equação é dada por:
 			// t = (p0 - l0). n / (n . r)
-			return (p0.vectAdd(l0.negative())).dotProduct(normal)/a - 0.00000000001;
+			return (p0.vectAdd(l0.negative())).dotProduct(normal)/a - 0.0001;
 			// Explicação detalhada em: 
 			// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection.html
 		}

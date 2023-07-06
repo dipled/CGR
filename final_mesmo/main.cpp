@@ -283,12 +283,6 @@ int main(int argc, char *argv[])
 
 	RGBType *pixels = new RGBType[n];
 
-	//Buga quando campo.getVectX() é menor que 3
-	//if (posCam.getVectX() < 3)
-	//{
-	//	posCam.setVectX(3);
-	//}
-
 	// Diferença entre a posição da camera e o ponto de look at, isto é a direção em que a câmera olha:
 	// 	Dir = P_cam - L_at
 	Vect diferenca = look_at.vectAdd(posCam.negative());
@@ -332,11 +326,11 @@ int main(int argc, char *argv[])
 	objCena.push_back(dynamic_cast<Object *>(&sphere_10));
 	objCena.push_back(dynamic_cast<Object *>(&sphere_11));
 
-	//objCena.push_back(dynamic_cast<Object *>(&sphere_5));
+	objCena.push_back(dynamic_cast<Object *>(&sphere_5));
 	objCena.push_back(dynamic_cast<Object *>(&ground));
 	objCena.push_back(dynamic_cast<Object *>(&wall));
-	// objCena.push_back(dynamic_cast<Object*>(&wall_2));
-	// objCena.push_back(dynamic_cast<Object*>(&wall_3));
+	objCena.push_back(dynamic_cast<Object*>(&wall_2));
+	objCena.push_back(dynamic_cast<Object*>(&wall_3));
 
 	int thisone, aa_index;
 	double xamnt, yamnt;
@@ -366,7 +360,7 @@ int main(int argc, char *argv[])
 				
 				// x_amnt = ( (x + 0.5) /h ) - (w-h)/(2h)
 				// xamnt = ((x + 0.5) / (double)height) - ((width - height) / (double)height) / 2; 
-				xamnt = ((x + 0.5) / (double)height) - ((width - height) / ((double) 2*height)); 
+				xamnt = ((x + 0.5) / (double)height) - ((width - height) / ((double) 2*height)) - 0.5; 
 
 				// Note que:
 				// (a) para imagem não ficar esticada em alguma direção, a variação de uma unidade em x deve ser igual...
@@ -380,7 +374,7 @@ int main(int argc, char *argv[])
 				// ... x_amnt = (h - 0.5)/h
 				
 				// y_amnt = ceil( (h-y)/h )
-				yamnt = ((height - y) + 0.5) / height;
+				yamnt = ((height - y) + 0.5) / height - 0.5;
 
 				// Note que a primeira para 
 
@@ -391,8 +385,8 @@ int main(int argc, char *argv[])
 				// the imager is taller than it is wider
 				// A imagem é mais alta portanto deve ser larga:
 				
-				xamnt = (x + 0.5) / width;
-				yamnt = (height - y + 0.5) / (double)width - ((height - width) / (double)width) / 2;
+				xamnt = (x + 0.5) / width - 0.5;
+				yamnt = (height - y + 0.5) / (double)width - ((height - width) / (double)width) / 2 - 0.5;
 				
 				// Com x note que o que ocorre aqui é que x é normalizado entre 0 e 1 somado mas se soma 0.5 pois queremos...
 				// ... o centro do pixel, então se subtrai 0.5 para que fique no intervalo [-0.5, 0.5];
@@ -406,8 +400,8 @@ int main(int argc, char *argv[])
 			else
 			{
 				// Se a imagem é quadrada:
-				xamnt = ((x + 0.5) / width);
-				yamnt = (((height - y) + 0.5) / height);
+				xamnt = ((x + 0.5) / width) - 0.5;
+				yamnt = (((height - y) + 0.5) / height) - 0.5;
 
 			}
 
@@ -417,7 +411,7 @@ int main(int argc, char *argv[])
 			
 			// Equação do vetor diretor do raio que sai do pixel:
 			// R = dir + [ (xamnt - 0.5) * camright + (yamnt - 0.5) * camdown]
-			Vect rayDirecao = dirCam.vectAdd(camright.vectMult(xamnt - 0.5).vectAdd(camdown.vectMult(yamnt - 0.5))).normalize();
+			Vect rayDirecao = dirCam.vectAdd(camright.vectMult(xamnt).vectAdd(camdown.vectMult(yamnt))).normalize();
 			
 			// Obs. 1: este raio deve ser normalizado (os cálculos no código consideram o vetor de direção como unitário); 
 			// Obs. 2: a direção do raio é movida para ser direcionado para os pixels diferentes, pois o vetor dir é a direção em relação...
