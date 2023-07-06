@@ -18,13 +18,13 @@ class Plane : public Object {
 		distance = distanceValue;
 		color = colorValue;
 	}
-
 	
-	// method functions
+	// Todas as funções da classe:
 	Vect getPlaneNormal () { return normal; }
 	double getPlaneDistance () { return distance; }
 	virtual Color getColor () { return color; }
 	
+	// A normal do plano sobre qualquer ponto do plano é sempre igual:
 	virtual Vect getNormalAt(Vect point) {
 		return normal;
 	}
@@ -34,19 +34,23 @@ class Plane : public Object {
 	virtual double findIntersection(Ray ray) {
 		Vect ray_direction = ray.getRayDirection();
 		
-		// Produto escalar n . direção:
+		// Produto escalar n . r, onde n é a normal ao plano e r é o vetor de direção do raio:
 		double a = ray_direction.dotProduct(normal);
 		
-		// Se o ray nao for paralelo ao plano
+		// Se o raio não for paralelo ao plano (se fosse paralelo não poderia incidir):
 		if(a != 0) {
 			Vect p0 = normal.vectMult(distance);
 			Vect l0 = ray.getRayOrigin();
-			return (p0.vectAdd(l0.negative())).dotProduct(normal)/a - 0.000001;
+
+			// Sendo r o vetor de direção do raio, n a normal ao plano, p0 o ponto cujo a reta da pelo...
+			// ... vetor n incide no plano, l0 a origem do raio, a equação é dada por:
+			// t = (p0 - l0). n / (n . r)
+			return (p0.vectAdd(l0.negative())).dotProduct(normal)/a - 0.0001;
 			// Explicação detalhada em: 
 			// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection.html
 		}
 
-		// Caso não haja intersecção:
+		// Caso não haja intersecção (a intersecção nunca estará na direção contrária do raio):
 		return -1;
 	}
 	
